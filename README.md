@@ -27,6 +27,37 @@ Main Idea
 		* A whistle is blown (you hear the sound) then the game begins
 		* You fight your way to the police department
 		* Add an intro scene according to the character chosen
+		* At each chapter the police go up one floor
+	* Story line
+		* Intro: CEO is in his office and the assistant comes in and warns about the whistle blowing
+			* Assistant: 
+				* "The accountant has told everyone about the cooked books. Every one knows that the company is bankrupt." 
+				* "Are we even going to get paid? Anyway the police is on its way. You are going to jail."
+			* The CEO hits the assistant unconcious and says:
+				* "I have to leave with anyone noticing. Let's go to the helicopter pad."
+		* Executive floor
+			* Go to the elevator and go to the roof
+		* Roof
+			* Roof if closed. The Janitor has the key
+			* CEO:
+				* "It's closed. The Janitor must have the key."
+		* Basement
+			* Looking for the janitor
+			* CEO:
+				* "Let's take a look at those books. Maybe I should get rid of the evidence?"
+		* Accounting floor
+			* Check what has really been leaked
+		* Roof
+			* The key for the helicopter is in the car
+		* Garage
+			* Cops are blocking the way out (impossible to use the car)
+		* Marketing floor
+			* Elevator gets called by the people there
+		* End
+			* Escape in helicopter from the roof
+			* Escape from the door desguised as an employee
+			* Leap from the window using a parachute
+			* Get arrested by the police 
 	* Player
 		* You are accountant or executive wearing a suit
 		* You fight with your fists, legs or office objetcs
@@ -64,41 +95,3 @@ Main Idea
 		* Ground floor
 		* Street
 		* Police department
-
-Other ideas
------------
-* Fixed or moving camera with enemies falling from the sky and the player has to destroy them before hiting the ground
-	* Space invader like: 
-		* Use fixed gun turrets with limited angle and run from to the other 
-		* Player can move turrets to a better location
-	* 
-* Action platformer à la shovel knight, ghouls'n'goblins
-	* Level
-		* Add a procedurally generated terrain
-		* Changing background color according to the time of day
-	* Story
-		* Add a story according to the character played
-	* Player
-		* Wears a gun and jetpack or sword/hammer + wings
-		* Can kill and jump
-	* Collect coins for better items
-		* 
-	* Gain XP for new abilities
-		* 
-	* Achievements to unlock new characters
-		* Boxer + fists vs regular people
-		* Grave digger + shovel vs zombies
-		* Ghostbuster + vacuum cleaner vs ghosts
-		* Dwarf + hammer vs flacid monsters 
-		* Gardener + leaf blower vs skeletons
-		* Baseball player + bat vs other baseball players
-		* Police officer + taser baton vs protesters
-		* Mall officer + spray gun vs students
-		* Old lady + handbag vs dogs/thieves
-	* Enemies
-		* Punch player upon collision (take a hit + directional shock)
-* Platformer à la mario
-* Firefighter à la Atari
-	* Background is building with fires coming out of the window
-	* Player has to fight the fires and save the victims
-	* Player use a water cannon to extinguish the flames and a ladder to reach out to victims

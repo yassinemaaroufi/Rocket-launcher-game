@@ -14,6 +14,9 @@ var cursors;
 var score = 0;
 var scoreText;
 
+// Constants
+var floorHeight = 100;
+
 function preload() {
 	game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
@@ -73,7 +76,7 @@ function create() {
 	cursors = game.input.keyboard.createCursorKeys();
 	
 	// Pause game
-	// Create a layout for the game menu
+	// Create a layout for the game menu and dialog boxes
 
 }
 

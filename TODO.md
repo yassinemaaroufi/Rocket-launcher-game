@@ -27,7 +27,8 @@ SFX/music
 
 Tutorials
 ---------
-* http://phaser.io/examples/v2/camera/basic-follow (camera follow)
+* http://phaser.io/examples/v2/misc/pause-menu
+* http://phaser.io/examples/v2/camera/basic-follow (camera follow) (ok)
 * http://phaser.io/news/2015/05/random-dungeon-generator
 * http://blog.hovercraft.ie/post/119437806421/creating-a-platformer-tilemap-for-phaser
 * http://phaser.io/news/2015/04/optimizing-javascript-games
