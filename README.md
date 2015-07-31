@@ -102,10 +102,3 @@ Other ideas
 	* Background is building with fires coming out of the window
 	* Player has to fight the fires and save the victims
 	* Player use a water cannon to extinguish the flames and a ladder to reach out to victims
-
-
-TODO
-----
-Finish & adapt phaser tutorial
-Add main menu + splash screen
-Remove player bounce

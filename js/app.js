@@ -5,6 +5,7 @@
 */
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '', { preload: preload, create: create, update: update });
+var STATE = "splash";
 	
 var platforms;
 var player;
@@ -21,10 +22,18 @@ function preload() {
 }
 
 function create() {
-	game.physics.startSystem(Phaser.Physics.ARCADE);
 	
+	// World
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+	game.world.setBounds(0, 0, 2000, 2000);
+	
+	// Background
 	game.add.sprite(0, 0, 'sky');
-	scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
+	
+	// Score
+	scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
+	scoreText.fixedToCamera = true;
+	scoreText.cameraOffset.setTo(16, 16);
 	
 	// Ground & platforms
 	platforms = game.add.group();
@@ -48,7 +57,8 @@ function create() {
     }
 
 	// Player
-	player = game.add.sprite(32, game.world.height - 150, 'dude');
+	//player = game.add.sprite(32, game.world.height - 650, 'dude');
+	player = game.add.sprite(32, 0, 'dude');
 	game.physics.arcade.enable(player);
 	player.body.bounce.y = 0.2;
     player.body.gravity.y = 300;
@@ -56,8 +66,14 @@ function create() {
 	player.animations.add('left', [0, 1, 2, 3], 10, true);
     player.animations.add('right', [5, 6, 7, 8], 10, true);
 	
+	// Camera
+	game.camera.follow(player);
+	
 	// Controls
 	cursors = game.input.keyboard.createCursorKeys();
+	
+	// Pause game
+	// Create a layout for the game menu
 
 }
 
