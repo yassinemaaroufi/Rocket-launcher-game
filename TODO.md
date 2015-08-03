@@ -1,11 +1,16 @@
 TODO
 ====
+* Add main menu + splash screen
+	* Use this code for updating the game loop: http://tutorialzine.com/2015/06/making-your-first-html5-game-with-phaser/
+* Add in-game menu
+	* http://phaser.io/examples/v2/misc/pause-menu
 * Intall on Mac: Tiled and Inkscape
 * Use art from opengameart.org
-* Add main menu + splash screen
 * Remove player bounce
-* Remove jump & replace with hide action
-* Setup tilemap for level building
+* Turn to a 2D top down approach
+	* Disable gravity
+	* Remove jump & replace with hide action
+	* Setup tilemap for level building
 * Setup NPC dialogue boxes
 
 Animations

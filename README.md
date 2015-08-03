@@ -1,5 +1,5 @@
-Project defender
-================
+Project Whistle Blower
+======================
 
 Game project to develop from the phaser tutorial
 Try http://electron.atom.io for packaging as a desktop app
@@ -8,18 +8,20 @@ Main Idea
 ---------
 * Whistle blower platformer
 	* Graphics
-		* Flat side-scolling 2D
-		* Stick figures with thick lines or like in Jazzpunk
+		* Top-down 2D
+		* Stick figures with thick lines or like in Jazzpunk or other
 	* Game mechanics
 		* Fight you way out / escape unnoticed
-		* Hide behind furniture
-			* Lamp: player puts the shade on his head
-			* Behind drawers
-			* Under a rug
-			* Behind a door
-			* In the ventilation system
+		* Hide inside furniture
+			* Closet, armoire, etc.
+		* Hide behind furniture (for side 2D)
+			* Lamp: player puts the shade on his head (for side 2D)
+			* Behind drawers (for side 2D)
+			* Under a rug (for side 2D)
+			* Behind a door (for side 2D)
+			* In the ventilation system (for side 2D)
 			* Hide in a box (like in metal gear solid)
-			* Change clothes to blend in
+		* Change clothes to blend in
 	* Music
 		* Jazzy: like the pink panther and jazzpunk
 	* Story	
