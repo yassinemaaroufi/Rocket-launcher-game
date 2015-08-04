@@ -4,6 +4,8 @@ Project Whistle Blower
 Game project to develop from the phaser tutorial
 Try http://electron.atom.io for packaging as a desktop app
 
+>> See vimwiki for more (industrial espionnage)
+
 Main Idea
 ---------
 * Whistle blower platformer
