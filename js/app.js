@@ -15,6 +15,8 @@ var cursors;
 var score = 0;
 var scoreText;
 var floorHeight = 100;
+var map;
+var layer;
 
 var pauseButton;
 var inGameMenu;
@@ -46,11 +48,13 @@ var Menu = {
 var Game = {
 	
 	preload: function(){
-		game.load.image('sky', 'assets/sky.png');
-    	game.load.image('ground', 'assets/platform.png');
-    	game.load.image('star', 'assets/star.png');
-    	game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+		game.load.image('sky', 'assets/sprites/sky.png');
+    	game.load.image('ground', 'assets/sprites/platform.png');
+    	game.load.image('star', 'assets/sprites/star.png');
+    	game.load.spritesheet('dude', 'assets/sprites/dude.png', 32, 48);
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
+		game.load.tilemap('tilemap1', 'assets/tilemaps/maps/tilemap1.csv', null, Phaser.Tilemap.CSV);
+		game.load.image('tileset1', 'assets/tilemaps/tiles/tileset1.jpg');
 	},
 	create: function(){
 		
@@ -61,6 +65,12 @@ var Game = {
 
 		// Background
 		game.add.sprite(0, 0, 'sky');
+		game.stage.backgroundColor = '#787878';
+		
+		map = game.add.tilemap('tilemap1', 32, 32);
+		map.addTilesetImage('tileset1');
+		layer = map.createLayer(0);
+		layer.resizeWorld();
 
 		// Score
 		scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
@@ -110,6 +120,8 @@ var Game = {
 		// Create a layout for the game menu and dialog boxes
 		// In-game menu
 		pauseButton = game.add.text(GAME_WIDTH - 100, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
+		pauseButton.fixedToCamera = true;
+		pauseButton.cameraOffset.setTo(GAME_WIDTH - 100, 20);
     	pauseButton.inputEnabled = true;
     	pauseButton.events.onInputUp.add(function () {
 			if(game.paused){
