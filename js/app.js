@@ -52,13 +52,13 @@ var Menu = {
 var Game = {
 	
 	preload: function(){
-		game.load.image('sky', 'assets/sprites/sky.png');
+		//game.load.image('sky', 'assets/sprites/sky.png');
     	game.load.image('ground', 'assets/sprites/platform.png');
     	game.load.image('star', 'assets/sprites/star.png');
     	game.load.spritesheet('dude', 'assets/sprites/dude.png', playerWidth, playerHeight);
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
 		game.load.tilemap('tilemap1', 'assets/tilemaps/maps/tilemap1.csv', null, Phaser.Tilemap.CSV);
-		game.load.image('tileset1', 'assets/tilemaps/tiles/tileset1.jpg');
+		game.load.image('tileset1', 'assets/tilemaps/tiles/tileset1.png');
 	},
 	create: function(){
 		
@@ -68,16 +68,15 @@ var Game = {
 		game.world.setBounds(0, 0, 2000, 2000);
 
 		// Background
-		game.add.sprite(0, 0, 'sky');
+		//game.add.sprite(0, 0, 'sky');
 		game.stage.backgroundColor = '#787878';
 		
 		map = game.add.tilemap('tilemap1', tileWidth, tileHeight);
 		map.addTilesetImage('tileset1');
 		
-		map.setCollision([2]);
-		//
+		map.setCollision([0,1]);
+
 		layer = map.createLayer(0);
-		//layer.debug = true;
 		layer.resizeWorld();
 
 		// Score
