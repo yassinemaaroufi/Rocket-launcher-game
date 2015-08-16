@@ -7,6 +7,10 @@
 // Constants
 var GAME_WIDTH = 800;
 var GAME_HEIGHT = 600;
+var playerHeight = 48;
+var playerWidth = 32;
+var tileHeight = 32;
+var tileWidth = 32;
 
 var platforms;
 var player;
@@ -51,7 +55,7 @@ var Game = {
 		game.load.image('sky', 'assets/sprites/sky.png');
     	game.load.image('ground', 'assets/sprites/platform.png');
     	game.load.image('star', 'assets/sprites/star.png');
-    	game.load.spritesheet('dude', 'assets/sprites/dude.png', 32, 48);
+    	game.load.spritesheet('dude', 'assets/sprites/dude.png', playerWidth, playerHeight);
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
 		game.load.tilemap('tilemap1', 'assets/tilemaps/maps/tilemap1.csv', null, Phaser.Tilemap.CSV);
 		game.load.image('tileset1', 'assets/tilemaps/tiles/tileset1.jpg');
@@ -61,19 +65,23 @@ var Game = {
 
 		// World
 		game.physics.startSystem(Phaser.Physics.ARCADE);
-		game.world.setBounds(0, 0, 50, 50);
+		game.world.setBounds(0, 0, 2000, 2000);
 
 		// Background
 		game.add.sprite(0, 0, 'sky');
 		game.stage.backgroundColor = '#787878';
 		
-		map = game.add.tilemap('tilemap1', 32, 32);
+		map = game.add.tilemap('tilemap1', tileWidth, tileHeight);
 		map.addTilesetImage('tileset1');
+		
+		map.setCollision([2]);
+		//
 		layer = map.createLayer(0);
+		//layer.debug = true;
 		layer.resizeWorld();
 
 		// Score
-		scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#fff' });
+		scoreText = game.add.text(16, 16, 'score: 1', { fontSize: '32px', fill: '#fff' });
 		scoreText.fixedToCamera = true;
 		scoreText.cameraOffset.setTo(16, 16);
 
@@ -100,8 +108,9 @@ var Game = {
 
 		// Player
 		//player = game.add.sprite(32, game.world.height - 650, 'dude');
-		player = game.add.sprite(32, 0, 'dude');
+		player = game.add.sprite(game.world.width/2, game.world.height/2, 'dude');
 		game.physics.arcade.enable(player);
+		player.body.setSize(tileWidth, tileHeight, 0, playerHeight - tileHeight);
 		//player.body.bounce.y = 0.2;
 		//player.body.gravity.y = 300;
 		player.body.collideWorldBounds = true;
@@ -144,6 +153,7 @@ var Game = {
 	update: function(){
 		//game.physics.arcade.collide(stars, platforms);
 		game.physics.arcade.collide(player, platforms);
+		game.physics.arcade.collide(player, layer);
 		//game.physics.arcade.overlap(player, stars, this.collectStar, null, this);
 
 		var moving = false;
