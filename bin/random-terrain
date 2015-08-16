@@ -1,0 +1,26 @@
+#!/usr/bin/python
+
+# Usage:
+# <script> <height> <width>
+
+import random
+from sys import argv
+
+#s, h, w = argv
+
+w = 32
+h = 32
+choices = ['0','1','2']
+
+f = open('tilemap.csv', 'w')
+
+for i in range(int(h)):
+    l = []
+    for j in range(int(w)):
+        l += [random.choice(choices)]
+        # Add random function
+    f.write(','.join(l))
+    f.write('\n')
+
+f.close()
+
