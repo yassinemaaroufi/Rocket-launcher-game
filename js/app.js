@@ -61,7 +61,7 @@ var Game = {
 
 		// World
 		game.physics.startSystem(Phaser.Physics.ARCADE);
-		game.world.setBounds(0, 0, 2000, 2000);
+		game.world.setBounds(0, 0, 50, 50);
 
 		// Background
 		game.add.sprite(0, 0, 'sky');
