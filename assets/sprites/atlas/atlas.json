@@ -4,6 +4,6 @@
 {"filename":"rocket-1-stage1",	"frame":{"x":32,"y":0,"w":32,"h":64},	"spriteSourceSize":{"x":0,"y":0,"w":32,"h":64},	"sourceSize":{"w":32,"h":64}},
 {"filename":"rocket-1-stage2",	"frame":{"x":64,"y":0,"w":32,"h":64},	"spriteSourceSize":{"x":0,"y":0,"w":32,"h":64},	"sourceSize":{"w":32,"h":64}},
 {"filename":"rocket-1-stage3",	"frame":{"x":96,"y":0,"w":32,"h":32},	"spriteSourceSize":{"x":0,"y":0,"w":32,"h":32},	"sourceSize":{"w":32,"h":32}},
-{"filename":"rocket-1-stage4",	"frame":{"x":112,"y":0,"w":16,"h":32},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":32},	"sourceSize":{"w":16,"h":32}}
+{"filename":"rocket-1-stage4",	"frame":{"x":128,"y":0,"w":16,"h":32},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":32},	"sourceSize":{"w":16,"h":32}}
 
 ]}
