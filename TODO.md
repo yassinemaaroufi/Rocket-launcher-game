@@ -1,9 +1,9 @@
 TODO
 ====
 * Setup launch
-	* Add velocity, friction when no fuel
+	* Add gravity/drag when no fuel
 	* Add fuel constraint
-	* Add weight constraint: velocity * x
+	* Add weight constraint: velocity * x for heavier modules
 * Background 
 	* Apply a mask: gets darker at the same time as higher altitude
 * Setup NPC dialogue boxes
