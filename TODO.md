@@ -1,7 +1,7 @@
 TODO
 ====
 * Setup launch
-	* Add gravity/drag when no fuel
+	* Add gravity/drag when no fuel		<--------
 	* Add fuel constraint
 	* Add weight constraint: velocity * x for heavier modules
 * Background 

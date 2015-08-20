@@ -9,20 +9,20 @@
 //var GAME_HEIGHT = 600;
 var GAME_WIDTH = 320;
 var GAME_HEIGHT = 480;
-//var playerWidth = 32;
-//var playerHeight = 48;
-var playerWidth = 3;
-var playerHeight = 9;
 var tileWidth = 32;
 var tileHeight = 32;
+
 var FLOOR_HEIGHT = 32;
 var LAUNCHPAD_HEIGHT = 16;
-var GRAVITY = 1200;
+var GRAVITY = 100;
 var ROCKET_STAGES = 4;
+var AIR_DRAG = 100;
+var MAX_VELOCITY = 500;
+var LOCAL_GRAVITY = 100;
+var DEFAULT_ACCELERATION = -500;
 
 // Global variables
 var platforms;
-var player;
 //var stars;
 var cursors;
 var score = 0;
@@ -39,6 +39,9 @@ var currentRocketStage;
 var fuelGauges;
 var fuelGaugesText;
 var altitudeGaugeText;
+
+var scoreAltitude;
+var scoreMaxAltitude;
 
 var launchButton;	// Launch rocket
 var stageButton;	// Release next stage
@@ -72,7 +75,7 @@ var Game = {
 	
 	preload: function(){
     	game.load.image('ground', 'assets/sprites/platform.png');
-    	game.load.spritesheet('dude', 'assets/sprites/scientist.png', playerWidth, playerHeight);
+    	//game.load.spritesheet('test-rocket', 'assets/sprites/rocket.png', 32, 64);
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
 		//game.load.tilemap('tilemap1', 'assets/tilemaps/maps/launchpad.csv', null, Phaser.Tilemap.CSV);
 		//game.load.image('tileset1', 'assets/tilemaps/tilesets/32x32/tileset2.png');
@@ -85,11 +88,11 @@ var Game = {
 		// World
 		game.world.setBounds(0, 0, 320, 32000);
 		game.physics.startSystem(Phaser.Physics.ARCADE);
-		//game.physics.arcade.gravity.y = 1000;
+		game.physics.arcade.gravity.y = GRAVITY;
 
 		// Background
-		//game.add.sprite(0, 0, 'sky');
 		game.stage.backgroundColor = '#b2b2ff';
+		//game.add.sprite(0, 0, 'sky');
 		
 		// Tilemaps
 		//map = game.add.tilemap('tilemap1', tileWidth, tileHeight);
@@ -106,93 +109,60 @@ var Game = {
 		ground.body.immovable = true;
 		//ground.body.static = true;
 		//ground.body.collideWorldBounds = true;
-		//var ledge = platforms.create(400, 400, 'ground');
-		/*ledge.body.immovable = true;
-		ledge = platforms.create(-150, 250, 'ground');
-		ledge.body.immovable = true;*/
+		ground.body.allowGravity = false;
 
 		// Indicators (altitude, thrust, )
 		altitudeGaugeText = game.add.text(0, 0, 'Altitude: 0', { fontSize: '14px', fill: '#fff' });
 		altitudeGaugeText.fixedToCamera = true;
 		altitudeGaugeText.cameraOffset.setTo(10, 30);
 
+		// Scores
+		scoreAltitude = 0;
+		scoreMaxAltitude = 0;
+
 		// Rocket setup
 		fuelGauges = [];
 		fuelGaugesText = [];
 		// Rocket
 		var rocketHeight = game.world.height - FLOOR_HEIGHT;
-		rocket = game.add.group();
-		rocket.enableBody = true;
+		//rocket = game.add.group();
+		//rocket.enableBody = true;
 
 		rocketStages = [];
 		currentRocketStage = 0;
 		rocketLaunched = false;
-
 
 		for(i=0; i<ROCKET_STAGES; i++){
 			fuelGauges.push(100);
 			fuelGaugesText.push(game.add.text(0, 0, '100%', { fontSize: '14px', fill: '#fff' }));
 			fuelGaugesText[i].fixedToCamera = true;
 			fuelGaugesText[i].cameraOffset.setTo(10 + 40*i, 10);
-
 		}
 
 		for(i=0; i<=ROCKET_STAGES; i++){
 			rocketStages.push(this.setupRocketStage('rocket', i, rocketHeight));
 			rocketHeight = rocketStages[i].y;
-
 		}
 
-		/*rocketStages.push(this.setupRocketStage('atlas', 1, rocketHeight));
-		rocketHeight = rocketStages[rocketStages.length-1].y;
-
-		rocketStages.push(this.setupRocketStage('atlas', 2, rocketHeight));
-		rocketHeight = rocketStages[rocketStages.length-1].y;
-
-		rocketStages.push(this.setupRocketStage('atlas', 3, rocketHeight));
-		rocketHeight = rocketStages[rocketStages.length-1].y;
-
-		rocketStages.push(this.setupRocketStage('atlas', 4, rocketHeight));
-		rocketHeight = rocketStages[rocketStages.length-1].y;
-
-		rocketStages.push(this.setupRocketStage('atlas', 0, rocketHeight));
-		rocketHeight = rocketStages[rocketStages.length-1].y;*/
-
-		// Scientists
-		player = game.add.sprite(game.world.width/2, game.world.height - 300, 'dude');
-		game.physics.arcade.enable(player);
-		//player.body.setSize(tileWidth, tileHeight, 0, playerHeight - tileHeight);
-		//player.body.bounce.y = 0.2;
-		player.body.gravity.y = 12000;
-		player.body.collideWorldBounds = true;
-
-		/*player.animations.add('left', [0, 1, 2, 3], 10, true);
-		player.animations.add('right', [5, 6, 7, 8], 10, true);
-		player.animations.add('down', [5, 6, 7, 8], 10, true);
-		player.animations.add('up', [5, 6, 7, 8], 10, true);*/
-
-		player.animations.add('left', [3, 4, 3, 4], 10, true);
-		player.animations.add('right', [5, 6, 5, 6], 10, true);
-		player.animations.add('down', [1, 0, 2, 0], 10, true);
-		player.animations.add('up', [1, 0, 2, 0], 10, true);
+		// Test Rocket
+		//testRocket = game.add.sprite(100, game.world.height - 300, 'test-rocket');
+		//game.physics.arcade.enable(testRocket);
+		//testRocket.body.collideWorldBounds = true;
 
 		// Camera
-		//game.camera.follow(player);
 		game.camera.follow(rocketStages[Math.round(rocketStages.length/2)]);
+		//game.camera.follow(testRocket);
 
 		// Controls
-		cursors = game.input.keyboard.createCursorKeys();
+		//cursors = game.input.keyboard.createCursorKeys();
 
 		// Buttons
 		launchButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', this.launchRocket, this, 0, 1);
-		//launchButton = game.add.button(0, game.world.height - GAME_HEIGHT/2, 'launch-button', this.launchRocket, this, 0, 0, 1, 0);
-		//launchButton.fixedToCamera = true;
-		//launchButton.cameraOffset.setTo(0, GAME_HEIGHT/2);
 
 		// Pause game
 		// Create a layout for the game menu and dialog boxes
 		// In-game menu
-		pauseButton = game.add.text(GAME_WIDTH - 100, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
+		/*pauseButton = game.add.text(GAME_WIDTH - 100, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
 		pauseButton.fixedToCamera = true;
 		pauseButton.cameraOffset.setTo(GAME_WIDTH - 100, 20);
     	pauseButton.inputEnabled = true;
@@ -210,64 +180,50 @@ var Game = {
 			}
 				
 			});
-		
-		game.input.onDown.add(this.unpause, self);
+		game.input.onDown.add(this.unpause, self);*/
 		
 		},
 	update: function(){
-		//game.physics.arcade.collide(stars, platforms);
-		game.physics.arcade.collide(player, platforms);
+		//game.physics.arcade.collide(testRocket, platforms);
 		//game.physics.arcade.collide(rocket, rocket);
-		game.physics.arcade.collide(rocket, platforms);
-		//game.physics.arcade.collide(player, layer);
-		//game.physics.arcade.overlap(player, stars, this.collectStar, null, this);
+		//game.physics.arcade.collide(rocket, platforms);
+		game.physics.arcade.collide(rocketStages[0], platforms);
+		for(i=0; i<rocketStages.length - 1; i++){
+			game.physics.arcade.collide(rocketStages[i + 1], rocketStages[i]);
+		}
 
 		// Altitude indicator
 		if(rocketLaunched){
-			altitudeGaugeText.text = 'Altitude: ' + Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
+			//altitudeGaugeText.text = 'Altitude: ' + Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
+
+			scoreAltitude = Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
+			altitudeGaugeText.text = 'Altitude: ' + scoreAltitude;
 		}
 
+		// Scores
+		if(scoreMaxAltitude < scoreAltitude ){ scoreMaxAltitude = scoreAltitude; }
+		else{ 
+			// Fix camera
+		   	// Display scores and menu
+			// Save scores
+	   	}
+
 		// Fuel management
-		if(rocketLaunched && currentRocketStage < fuelGauges.length){
+		if(rocketLaunched && currentRocketStage < fuelGauges.length && fuelGauges[currentRocketStage] > 0){
 			fuelGauges[currentRocketStage]--;
 			fuelGaugesText[currentRocketStage].text = fuelGauges[currentRocketStage] + '%'
 		}
 
-		var moving = false;
-		player.body.velocity.x = 0;
-		player.body.velocity.y = 0;
-		
-		if (cursors.left.isDown){
-			moving = true;
-			player.body.velocity.x = -150;
-			player.animations.play('left');
+		if(fuelGauges[currentRocketStage] <= 0){
+			//testRocket.body.acceleration.y = 0;
+			for(i in rocketStages){
+				rocketStages[i].body.acceleration.y = 0;
+			}
+
 		}
-		if (cursors.right.isDown){
-			moving = true;
-			player.body.velocity.x = 150;
-			player.animations.play('right');
-		}
-		if (cursors.down.isDown){
-			moving = true;
-			player.body.velocity.y = 150;
-			player.animations.play('down');
-		}
-		if (cursors.up.isDown){
-			moving = true;
-			player.body.velocity.y = -150;
-			player.animations.play('up');
-		}
-		if (!moving){
-			player.animations.stop();
-			//player.frame = 4;
-			player.frame = 0;
-		}
+
 		
 		
-		
-		/*if (cursors.up.isDown && player.body.touching.down){	// Jump
-			player.body.velocity.y = -350;
-		}*/
 	},
 	setupActionButton : function(x, y, spritesheet, func, ctx, frameUp, frameDown){
 		var button = game.add.button(0, 0, spritesheet, func, ctx, frameUp, frameUp, frameDown, frameUp);
@@ -276,8 +232,8 @@ var Game = {
 		return button;
 	},
 	setupRocketStage : function(atlas, frame, height){
-		//var stg = game.add.sprite(0, 0, atlas);
-		var stg = rocket.create(0, 0, atlas);
+		var stg = game.add.sprite(0, 0, atlas);
+		//var stg = rocket.create(0, 0, atlas);
 		stg.frame = frame;
 		game.physics.arcade.enable(stg);
 		//stg.body.gravity.y = 1200;
@@ -287,32 +243,36 @@ var Game = {
 	},
 	launchRocket : function(){
 		console.log('Rocket launched');
-		// Add tween for easeIn speed
 		for(i in rocketStages){
-			rocketStages[i].body.velocity.y = -500;
+			rocketStages[i].body.acceleration.y = DEFAULT_ACCELERATION;		// Extract acceleration value according to module characteristics
+			rocketStages[i].body.gravity.y = LOCAL_GRAVITY;
+			rocketStages[i].body.drag.set(AIR_DRAG);
+			rocketStages[i].body.maxVelocity.set(MAX_VELOCITY); // Extract max velocity value according to module characteristics
 		}
+
 		launchButton.destroy();
 		stageButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', this.releaseNextStage, this, 0, 1);
 		rocketLaunched = true;
 	},
 	releaseNextStage : function(){
 		console.log('Next stage released');
-		/*rocketStages[currentRocketStage].body.gravity = 1200;
-		currentRocketStage++;
-		if(currentRocketStage >= rocketStages.length - 1){
-			stageButton.destroy();
-		}*/
-		rocketStages[0].body.gravity = 1200;
+
+		rocketStages[0].body.acceleration.y = 0;
 		rocketStages.shift();
 		game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
-		if(rocketStages.length == 1){ stageButton.destroy(); }
+
+		// Acceleration for the next stage
+		rocketStages[0].body.acceleration.y = DEFAULT_ACCELERATION;
+
+		// Last Stage release (payload)
+		if(rocketStages.length == 1){ 
+			stageButton.destroy(); 
+			rocketStages[0].body.acceleration.y = 0;
+			// Animation for releasing payload
+
+		}
 		currentRocketStage++;
 	},
-	/*collectStar : function(player, star){
-		star.kill();
-		score += 10;
-    	scoreText.text = 'Score: ' + score;
-	},*/
 	unpause : function(event){
         if(game.paused){
             // Calculate the coordinates of the menu
