@@ -1,8 +1,6 @@
 TODO
 ====
 * Setup launch
-	* Add gravity/drag when no fuel		<--------
-	* Add fuel constraint
 	* Add weight constraint: velocity * x for heavier modules
 * Background 
 	* Apply a mask: gets darker at the same time as higher altitude

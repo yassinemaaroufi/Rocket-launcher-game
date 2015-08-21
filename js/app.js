@@ -35,6 +35,7 @@ var inGameMenu;
 
 var rocktLaunched;
 var rocketStages;
+var rocketPayLoad;
 var currentRocketStage;
 var fuelGauges;
 var fuelGaugesText;
@@ -45,6 +46,7 @@ var scoreMaxAltitude;
 
 var launchButton;	// Launch rocket
 var stageButton;	// Release next stage
+var buttonLabel;		// Text above launch/release button
 
 // Game modes
 var Splash = {
@@ -80,7 +82,7 @@ var Game = {
 		//game.load.tilemap('tilemap1', 'assets/tilemaps/maps/launchpad.csv', null, Phaser.Tilemap.CSV);
 		//game.load.image('tileset1', 'assets/tilemaps/tilesets/32x32/tileset2.png');
 		game.load.atlas('rocket', 'assets/sprites/atlas/rocket.png', 'assets/sprites/atlas/rocket.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 64, 32);
+		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
 	},
 	create: function(){
 		
@@ -139,7 +141,7 @@ var Game = {
 			fuelGaugesText[i].cameraOffset.setTo(10 + 40*i, 10);
 		}
 
-		for(i=0; i<=ROCKET_STAGES; i++){
+		for(i=0; i<ROCKET_STAGES; i++){
 			rocketStages.push(this.setupRocketStage('rocket', i, rocketHeight));
 			rocketHeight = rocketStages[i].y;
 		}
@@ -158,6 +160,10 @@ var Game = {
 
 		// Buttons
 		launchButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', this.launchRocket, this, 0, 1);
+		buttonLabel = game.add.text(0, 0, 'Ignition', { fontSize: '14px', fill: '#fff' });
+		buttonLabel.fixedToCamera = true;
+		buttonLabel.cameraOffset.setTo(0, GAME_HEIGHT/2 - 25);
+
 
 		// Pause game
 		// Create a layout for the game menu and dialog boxes
@@ -196,7 +202,11 @@ var Game = {
 		if(rocketLaunched){
 			//altitudeGaugeText.text = 'Altitude: ' + Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
 
-			scoreAltitude = Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
+			if(rocketStages.length > 0){
+				scoreAltitude = Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
+			}else{
+				scoreAltitude = Math.floor(game.world.height - rocketPayLoad.y);
+			}
 			altitudeGaugeText.text = 'Altitude: ' + scoreAltitude;
 		}
 
@@ -211,7 +221,7 @@ var Game = {
 		// Fuel management
 		if(rocketLaunched && currentRocketStage < fuelGauges.length && fuelGauges[currentRocketStage] > 0){
 			fuelGauges[currentRocketStage]--;
-			fuelGaugesText[currentRocketStage].text = fuelGauges[currentRocketStage] + '%'
+			fuelGaugesText[currentRocketStage].text = Math.round(fuelGauges[currentRocketStage]) + '%'
 		}
 
 		if(fuelGauges[currentRocketStage] <= 0){
@@ -241,7 +251,7 @@ var Game = {
 		stg.y = height - stg.height;
 		return stg;
 	},
-	launchRocket : function(){
+	/*launchRocket : function(){
 		console.log('Rocket launched');
 		for(i in rocketStages){
 			rocketStages[i].body.acceleration.y = DEFAULT_ACCELERATION;		// Extract acceleration value according to module characteristics
@@ -252,7 +262,54 @@ var Game = {
 
 		launchButton.destroy();
 		stageButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', this.releaseNextStage, this, 0, 1);
+		buttonLabel.text = 'Release stage';
 		rocketLaunched = true;
+	},*/
+	launchRocket : function(){
+		if(!rocketLaunched){
+			console.log('Rocket launched');
+			for(i in rocketStages){
+				rocketStages[i].body.acceleration.y = DEFAULT_ACCELERATION;		// Extract acceleration value according to module characteristics
+				rocketStages[i].body.gravity.y = LOCAL_GRAVITY;
+				rocketStages[i].body.drag.set(AIR_DRAG);
+				rocketStages[i].body.maxVelocity.set(MAX_VELOCITY); // Extract max velocity value according to module characteristics
+			}
+			if(rocketStages.length == 1){ 
+				buttonLabel.text = 'Deploy payload';
+			}else{
+				buttonLabel.text = 'Release stage';
+			}
+			rocketLaunched = true;
+		}else{
+			console.log('Next stage released');
+
+			var stageVelocity = rocketStages[0].body.velocity.y;
+			var stageHeight = rocketStages[0].y;
+			rocketStages[0].body.acceleration.y = 0;
+			rocketStages.shift();
+			if(rocketStages.length > 0){
+				game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
+
+				// Acceleration for the next stage
+				rocketStages[0].body.acceleration.y = DEFAULT_ACCELERATION;
+
+			}else{
+				// Last Stage release (payload)
+				launchButton.destroy(); 
+				rocketPayLoad = game.add.sprite(0, 0, 'rocket');
+				rocketPayLoad.frame = 5;
+				game.physics.arcade.enable(rocketPayLoad);
+				rocketPayLoad.x = game.world.width/2 - rocketPayLoad.width/2;
+				//rocketPayLoad.y = rocketHeight;
+				//rocketPayLoad.y = scoreAltitude;
+				rocketPayLoad.y = stageHeight;
+				game.camera.follow(rocketPayLoad);
+				//rocketPayLoad.body.acceleration.y = DEFAULT_ACCELERATION;
+				rocketPayLoad.body.velocity.y = stageVelocity;
+				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ rocketPayLoad.body.acceleration.y = 0; }, this);
+			}
+			currentRocketStage++;
+		}
 	},
 	releaseNextStage : function(){
 		console.log('Next stage released');
