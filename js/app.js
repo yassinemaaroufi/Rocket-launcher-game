@@ -9,9 +9,7 @@
 //var GAME_HEIGHT = 600;
 var GAME_WIDTH = 320;
 var GAME_HEIGHT = 480;
-//var tileWidth = 32;
-//var tileHeight = 32;
-
+var ATLAS_SRC = 'assets/sprites/atlas/';
 var FLOOR_HEIGHT = 32;
 var LAUNCHPAD_HEIGHT = 16;
 var GRAVITY = 100;
@@ -47,6 +45,7 @@ var pauseButton;
 var inGameMenu;
 
 var currentRocket = 'test';
+var currentLaunchpad = 'test';
 
 var rocktLaunched;
 var rocketStages;
@@ -96,7 +95,8 @@ var Game = {
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
 		//game.load.tilemap('tilemap1', 'assets/tilemaps/maps/launchpad.csv', null, Phaser.Tilemap.CSV);
 		//game.load.image('tileset1', 'assets/tilemaps/tilesets/32x32/tileset2.png');
-		game.load.atlas('rocket', 'assets/sprites/atlas/rocket.png', 'assets/sprites/atlas/rocket.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+		game.load.atlas('rocket', ATLAS_SRC + 'rocket.png', ATLAS_SRC + 'rocket.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+		game.load.atlas('launchpad', ATLAS_SRC + 'launchpad.png', ATLAS_SRC + 'launchpad.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
 	},
 	create: function(){
@@ -123,9 +123,15 @@ var Game = {
 		// Ground & platforms
 		platforms = game.add.group();
 		platforms.enableBody = true;
-		var ground = platforms.create(0, game.world.height - 32, 'ground');
+		var ground = platforms.create(0, game.world.height - FLOOR_HEIGHT, 'ground');
 		ground.body.immovable = true;
 		ground.body.allowGravity = false;
+
+		var launchpad = platforms.create(0, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['height'], 'launchpad');
+		launchpad.frame = LAUNCHPAD_CONF[currentLaunchpad]['frame'];
+		launchpad.x = ROCKET_X_START_POSITION - launchpad.width/2
+		launchpad.body.immovable = true;
+		launchpad.body.allowGravity = false;
 
 		// Indicators (altitude, thrust, )
 		altitudeGaugeText = game.add.text(0, 0, 'Altitude: 0', { fontSize: '14px', fill: '#fff' });
@@ -140,7 +146,7 @@ var Game = {
 		fuelGauges = [];
 		fuelGaugesText = [];
 		// Rocket
-		var rocketHeight = game.world.height - FLOOR_HEIGHT;
+		var rocketHeight = game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['height'];
 
 		rocketStages = [];
 		currentRocketStage = 0;
