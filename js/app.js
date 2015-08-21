@@ -15,7 +15,7 @@ var tileHeight = 32;
 var FLOOR_HEIGHT = 32;
 var LAUNCHPAD_HEIGHT = 16;
 var GRAVITY = 100;
-var ROCKET_STAGES = 1;
+var ROCKET_STAGES = 1; // Always > 0
 var AIR_DRAG = 100;
 var MAX_VELOCITY = 500;
 var LOCAL_GRAVITY = 100;
@@ -167,7 +167,7 @@ var Game = {
 		if(rocketStages.length == 1){
 			game.camera.follow(rocketStages[0]);
 		}else{
-			game.camera.follow(rocketStages[Math.round(rocketStages.length-1/2)]);
+			game.camera.follow(rocketStages[Math.round(rocketStages.length/2)]);
 		}
 		//game.camera.follow(testRocket);
 
