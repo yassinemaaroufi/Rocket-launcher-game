@@ -9,8 +9,8 @@
 //var GAME_HEIGHT = 600;
 var GAME_WIDTH = 320;
 var GAME_HEIGHT = 480;
-var tileWidth = 32;
-var tileHeight = 32;
+//var tileWidth = 32;
+//var tileHeight = 32;
 
 var FLOOR_HEIGHT = 32;
 var LAUNCHPAD_HEIGHT = 16;
@@ -272,6 +272,7 @@ var Game = {
 
 			var stageVelocity = rocketStages[0].body.velocity.y;
 			var stageHeight = rocketStages[0].y;
+			var lastStage = rocketStages[0];
 			rocketStages[0].body.acceleration.y = 0;
 			rocketStages.shift();
 			if(rocketStages.length > 0){
@@ -285,13 +286,13 @@ var Game = {
 				launchButton.destroy(); 
 				buttonLabel.destroy(); 
 				rocketPayLoad = game.add.sprite(0, 0, 'rocket');
-				//rocketPayLoad.frame = 5;
 				rocketPayLoad.frame = ROCKET_CONF[currentRocket]['payLoadFrame'];
-				game.physics.arcade.enable(rocketPayLoad);
 				rocketPayLoad.x = ROCKET_X_START_POSITION - rocketPayLoad.width/2;
 				rocketPayLoad.y = stageHeight;
-				game.camera.follow(rocketPayLoad);
+				game.physics.arcade.enable(rocketPayLoad);
 				rocketPayLoad.body.velocity.y = stageVelocity;
+				game.camera.follow(rocketPayLoad);
+				lastStage.bringToTop();
 				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ rocketPayLoad.body.acceleration.y = 0; }, this);
 			}
 			currentRocketStage++;
