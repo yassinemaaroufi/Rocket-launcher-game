@@ -15,23 +15,28 @@ var tileHeight = 32;
 var FLOOR_HEIGHT = 32;
 var LAUNCHPAD_HEIGHT = 16;
 var GRAVITY = 100;
-var ROCKET_STAGES = 5;
+var ROCKET_STAGES = 1;
 var AIR_DRAG = 100;
 var MAX_VELOCITY = 500;
 var LOCAL_GRAVITY = 100;
 var DEFAULT_ACCELERATION = -500;
 var ROCKET_X_START_POSITION = GAME_WIDTH/2;
 var ROCKETS_CONF = {
-	'test-rocket':{
+	'test':{
 		'stages': 5,
 		'firstFrame': 0,
 		'payLoadFrame': 5
-	},
+	}
+};
+var LAUNCHPAD_CONF = {
+	'test':{
+		'frame':0,
+		'height':16
+	}
 };
 
 // Global variables
 var platforms;
-//var stars;
 var cursors;
 var score = 0;
 //var scoreText;
@@ -86,7 +91,7 @@ var Menu = {
 var Game = {
 	
 	preload: function(){
-    	game.load.image('ground', 'assets/sprites/platform.png');
+    	game.load.image('ground', 'assets/sprites/platform.png'); // Use atlas instead
     	//game.load.spritesheet('test-rocket', 'assets/sprites/rocket.png', 32, 64);
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
 		//game.load.tilemap('tilemap1', 'assets/tilemaps/maps/launchpad.csv', null, Phaser.Tilemap.CSV);
@@ -119,10 +124,7 @@ var Game = {
 		platforms = game.add.group();
 		platforms.enableBody = true;
 		var ground = platforms.create(0, game.world.height - 32, 'ground');
-		//ground.scale.setTo(2, 2);
 		ground.body.immovable = true;
-		//ground.body.static = true;
-		//ground.body.collideWorldBounds = true;
 		ground.body.allowGravity = false;
 
 		// Indicators (altitude, thrust, )
@@ -139,8 +141,6 @@ var Game = {
 		fuelGaugesText = [];
 		// Rocket
 		var rocketHeight = game.world.height - FLOOR_HEIGHT;
-		//rocket = game.add.group();
-		//rocket.enableBody = true;
 
 		rocketStages = [];
 		currentRocketStage = 0;
@@ -164,7 +164,11 @@ var Game = {
 		//testRocket.body.collideWorldBounds = true;
 
 		// Camera
-		game.camera.follow(rocketStages[Math.round(rocketStages.length/2)]);
+		if(rocketStages.length == 1){
+			game.camera.follow(rocketStages[0]);
+		}else{
+			game.camera.follow(rocketStages[Math.round(rocketStages.length-1/2)]);
+		}
 		//game.camera.follow(testRocket);
 
 		// Controls
