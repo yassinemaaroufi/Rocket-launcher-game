@@ -29,7 +29,8 @@ var ROCKET_CONF = {
 var LAUNCHPAD_CONF = {
 	'test':{
 		'frame':0,
-		'height':16
+		'height':16,
+		'bgHeight':128
 	}
 };
 
@@ -97,6 +98,7 @@ var Game = {
 		//game.load.image('tileset1', 'assets/tilemaps/tilesets/32x32/tileset2.png');
 		game.load.atlas('rocket', ATLAS_SRC + 'rocket.png', ATLAS_SRC + 'rocket.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.atlas('launchpad', ATLAS_SRC + 'launchpad.png', ATLAS_SRC + 'launchpad.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+		game.load.atlas('launchpad-bg', ATLAS_SRC + 'launchpad-bg.png', ATLAS_SRC + 'launchpad-bg.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
 	},
 	create: function(){
@@ -120,6 +122,11 @@ var Game = {
 		//layer = map.createLayer(0);
 		//layer.resizeWorld();
 
+		// Launchpad background
+		var launchpadBg = game.add.sprite(0, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['bgHeight'], 'launchpad-bg');
+		launchpadBg.frame = LAUNCHPAD_CONF[currentLaunchpad]['frame'];
+		launchpadBg.x = ROCKET_X_START_POSITION - launchpadBg.width/2;
+
 		// Ground & platforms
 		platforms = game.add.group();
 		platforms.enableBody = true;
@@ -127,9 +134,10 @@ var Game = {
 		ground.body.immovable = true;
 		ground.body.allowGravity = false;
 
+		// Launchpad
 		var launchpad = platforms.create(0, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['height'], 'launchpad');
 		launchpad.frame = LAUNCHPAD_CONF[currentLaunchpad]['frame'];
-		launchpad.x = ROCKET_X_START_POSITION - launchpad.width/2
+		launchpad.x = ROCKET_X_START_POSITION - launchpad.width/2;
 		launchpad.body.immovable = true;
 		launchpad.body.allowGravity = false;
 
