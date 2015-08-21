@@ -280,6 +280,9 @@ var Game = {
 
 				// Acceleration for the next stage
 				rocketStages[0].body.acceleration.y = DEFAULT_ACCELERATION;
+				if(rocketStages.length == 1){ 
+					buttonLabel.text = 'Deploy payload';
+				}
 
 			}else{
 				// Last Stage release (payload)
