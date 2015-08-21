@@ -15,11 +15,19 @@ var tileHeight = 32;
 var FLOOR_HEIGHT = 32;
 var LAUNCHPAD_HEIGHT = 16;
 var GRAVITY = 100;
-var ROCKET_STAGES = 4;
+var ROCKET_STAGES = 5;
 var AIR_DRAG = 100;
 var MAX_VELOCITY = 500;
 var LOCAL_GRAVITY = 100;
 var DEFAULT_ACCELERATION = -500;
+var ROCKET_X_START_POSITION = GAME_WIDTH/2;
+var ROCKETS_CONF = {
+	'test-rocket':{
+		'stages': 5,
+		'firstFrame': 0,
+		'payLoadFrame': 5
+	},
+};
 
 // Global variables
 var platforms;
@@ -32,6 +40,8 @@ var layer;
 
 var pauseButton;
 var inGameMenu;
+
+var currentRocket;
 
 var rocktLaunched;
 var rocketStages;
@@ -91,6 +101,8 @@ var Game = {
 		game.world.setBounds(0, 0, 320, 32000);
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		game.physics.arcade.gravity.y = GRAVITY;
+
+		//ROCKET_X_START_POSITION = game.world.width/2;
 
 		// Background
 		game.stage.backgroundColor = '#b2b2ff';
@@ -247,7 +259,8 @@ var Game = {
 		stg.frame = frame;
 		game.physics.arcade.enable(stg);
 		//stg.body.gravity.y = 1200;
-		stg.x = game.world.width/2 - stg.width/2;
+		//stg.x = game.world.width/2 - stg.width/2;
+		stg.x = ROCKET_X_START_POSITION - stg.width/2;
 		stg.y = height - stg.height;
 		return stg;
 	},
@@ -296,10 +309,12 @@ var Game = {
 			}else{
 				// Last Stage release (payload)
 				launchButton.destroy(); 
+				buttonLabel.destroy(); 
 				rocketPayLoad = game.add.sprite(0, 0, 'rocket');
 				rocketPayLoad.frame = 5;
 				game.physics.arcade.enable(rocketPayLoad);
-				rocketPayLoad.x = game.world.width/2 - rocketPayLoad.width/2;
+				//rocketPayLoad.x = game.world.width/2 - rocketPayLoad.width/2;
+				rocketPayLoad.x = ROCKET_X_START_POSITION - rocketPayLoad.width/2;
 				//rocketPayLoad.y = rocketHeight;
 				//rocketPayLoad.y = scoreAltitude;
 				rocketPayLoad.y = stageHeight;
