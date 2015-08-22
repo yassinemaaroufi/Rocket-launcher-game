@@ -1,101 +1,90 @@
-Project Whistle Blower
-======================
+Project Rocket Launch
+=====================
 
-Game project to develop from the phaser tutorial
 Try http://electron.atom.io for packaging as a desktop app
 
->> See vimwiki for more (industrial espionnage)
-
 Main Idea
----------
-* Whistle blower platformer
-	* Graphics
-		* Top-down 2D
-		* Stick figures with thick lines or like in Jazzpunk or other
-	* Game mechanics
-		* Fight you way out / escape unnoticed
-		* Hide inside furniture
-			* Closet, armoire, etc.
-		* Hide behind furniture (for side 2D)
-			* Lamp: player puts the shade on his head (for side 2D)
-			* Behind drawers (for side 2D)
-			* Under a rug (for side 2D)
-			* Behind a door (for side 2D)
-			* In the ventilation system (for side 2D)
-			* Hide in a box (like in metal gear solid)
-		* Change clothes to blend in
-	* Music
-		* Jazzy: like the pink panther and jazzpunk
-	* Story	
-		* You are a whistle blower in a big corporation
-		* A whistle is blown (you hear the sound) then the game begins
-		* You fight your way to the police department
-		* Add an intro scene according to the character chosen
-		* At each chapter the police go up one floor
-	* Story line
-		* Intro: CEO is in his office and the assistant comes in and warns about the whistle blowing
-			* Assistant: 
-				* "The accountant has told everyone about the cooked books. Every one knows that the company is bankrupt." 
-				* "Are we even going to get paid? Anyway the police is on its way. You are going to jail."
-			* The CEO hits the assistant unconcious and says:
-				* "I have to leave with anyone noticing. Let's go to the helicopter pad."
-		* Executive floor
-			* Go to the elevator and go to the roof
-		* Roof
-			* Roof if closed. The Janitor has the key
-			* CEO:
-				* "It's closed. The Janitor must have the key."
-		* Basement
-			* Looking for the janitor
-			* CEO:
-				* "Let's take a look at those books. Maybe I should get rid of the evidence?"
-		* Accounting floor
-			* Check what has really been leaked
-		* Roof
-			* The key for the helicopter is in the car
-		* Garage
-			* Cops are blocking the way out (impossible to use the car)
-		* Marketing floor
-			* Elevator gets called by the people there
-		* End
-			* Escape in helicopter from the roof
-			* Escape from the door desguised as an employee
-			* Leap from the window using a parachute
-			* Get arrested by the police 
-	* Player
-		* You are accountant or executive wearing a suit
-		* You fight with your fists, legs or office objetcs
-	* Playable characters
-		* Accountant: 
-			* Fights with a calculator 
-			* Uncovers cooked books and tries to contact the FBI
-			* Starts in his office all the way down to the street
-		* Executive: 
-			* Uses his tie as a whip
-			* Flees from the company after cooking the books/bankrupting the company
-			* Starts in the executive office all the way down to the garage to get his car or to the roof to get the helicopter
-			* Gets arrested/tazed by the police
-		* Assistant: 
-			* Fights with a notebook
-			* ??
-		* Intern
-			* Fights with his laptop
-			* Just does what he's told to
-			* Goes from floor to floor beating everyone
-		* Delivery guy
-			* Fights with a pizza box
-			* Fights his way to the top to deliver the pizza
-			* Starts at the reception and climbs up
-		* Janitor (special character): 
-			* Just sweeps the floor, does not fights or fights/chases mice
-			* Cleans and chases mice
-			* Goes from floor to floor
-		* Santa
-			* Fights with his fists
-			* Delivered a present and has to take office
-			* Starts from the bottom floor and goes to his sledge on the roof
-	* Levels
-		* Offices floor
-		* Ground floor
-		* Street
-		* Police department
+=========
+Launch rocket to the highest possible altitude
+
+TODO
+====
+
+Animation & graphics
+--------------------
+* Smoke/fumes and reactor flames
+* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
+* Apply a mask to the background: gets darker at the same time as higher altitude
+* Background sprites: Clouds, stars, birds, debris (boots, banana, ), astronaut, etoile filante
+* Background: atmosphere, stratosphere, space
+* Other buttons: menu, shop
+* Customization: 
+	* stickers on the rocket: flag, logo (nasa, companies, etc.), other (peace, etc.)
+	* Colors
+
+Game mechanics
+--------------
+* Implement boosters as a stage
+* Achievements & scores
+	* Scores: Highest altitude, Number of attempts, fuel use
+	* Achievements/misions
+		* High riser = go beyond a certain altitude
+		* Deliver apollo above x altitude
+		* Deliver satellite between x and y altitude
+* Rocket description card
+	* Name, speed, duration of launch, stages, pictures, video?, diagrams of the rocket, 
+	* Constructor, Country, Years of service
+* Launchpad description card
+	* Name, country, map, pictures, video?
+* Add game menus: 
+	* Main: Start, credits & exit
+	* Start: Choose rocket, Choose launchpad, Launch
+		* Choose rocket
+		* Choose launchpad
+	* Achievements & scores
+	* Credits
+* Unlock rockets (order by date)
+	* Order by date
+	* Start with a 1 stage rocket then 2, 3 etc.
+	* Vostok, proton, soyuz, Atlas, ariane, delta, titan, etc.
+	* Add future rockets (under development), prototypes and retired rockets too
+	* See: https://en.wikipedia.org/wiki/Comparison_of_orbital_launch_systems
+	* Present info about the rocket (stages, mass, thrust, etc.) to be informative
+	* See launch video and pictures for more details
+	* See: https://en.wikipedia.org/wiki/List_of_orbital_launch_systems
+* Unlock launchpads
+	* See: https://en.wikipedia.org/wiki/Launch_vehicle#By_launch_platform
+	* See: https://en.wikipedia.org/wiki/Spaceport
+	* See: https://en.wikipedia.org/wiki/List_of_rocket_launch_sites
+	* Land
+	* Seaport: 
+		* https://en.wikipedia.org/wiki/Broglio_Space_Centre
+		* SeaLaunch: https://en.wikipedia.org/wiki/Sea_Launch
+
+Audio
+-----
+* Rocket sounds: rip from video or open game art
+* Stage release sound
+* Launch operator voices: US, chinese, russian see in videos
+
+Other
+-----
+* Use art from opengameart.org
+* Get paid to deliver satellites to space
+	* Random payloads: satellite, animal, astronaut, probe, etc.
+	* Failed delivery = no money
+	* Deliver the payload at the required altitude?
+* Essentials: money, rocket weight, fuel capacity, fuel consumption, payload, 
+	* Speed depends on the weight (rocket + payload) and engine thrust 
+	* Distance traveled depends on thrust, fuel consumption and capacity
+* Setup launch
+	* Add weight constraint: velocity * x for heavier modules
+* Shop/lab/workshop
+	* New tech
+		* More efficient engine = less fuel consumption = more altitude
+		* More efficient fuel = less consumption = more altitude
+		* Better aerodynamics = less fuel consumption (add small to the rocket stages)
+	* New equipment
+		* Bigger engines = higher max speed = more fuel consumption
+		* Bigger fuel tanks = more fuel available
+* Modules: wings, bonus reactors attached to the sides
