@@ -198,17 +198,6 @@ var Game = {
 		cameraTargetDistance = 0;
 
 		// Particles
-		emitterSmoke = game.add.emitter(ROCKET_X_START_POSITION, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
-		emitterSmoke.makeParticles('smoke');
-		emitterSmoke.setXSpeed(-100, 100);
-		emitterSmoke.setYSpeed(-50, 0);
-		//emitterSmoke.minParticleSpeed.setTo(-100, -50);
-	    //emitterSmoke.maxParticleSpeed.setTo(100, 0);
-		emitterSmoke.minParticleScale = 0.1;
-	    emitterSmoke.maxParticleScale = 2.5;
-		emitterSmoke.gravity = -100;
-		//emitterSmoke.enableBody = true;
-
 		emitterFlame = game.add.emitter(ROCKET_X_START_POSITION, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
 		emitterFlame.makeParticles('flame');
 		emitterFlame.setXSpeed(0, 0);
@@ -219,6 +208,17 @@ var Game = {
 	    emitterFlame.maxParticleScale = 1.5;
 		//emitterFlame.gravity = -100;
 		emitterFlame.enableBody = true;
+
+		emitterSmoke = game.add.emitter(ROCKET_X_START_POSITION, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
+		emitterSmoke.makeParticles('smoke');
+		emitterSmoke.setXSpeed(-100, 100);
+		emitterSmoke.setYSpeed(-50, 0);
+		//emitterSmoke.minParticleSpeed.setTo(-100, -50);
+	    //emitterSmoke.maxParticleSpeed.setTo(100, 0);
+		emitterSmoke.minParticleScale = 0.1;
+	    emitterSmoke.maxParticleScale = 2.5;
+		emitterSmoke.gravity = -100;
+		//emitterSmoke.enableBody = true;
 
 
 		// Controls
@@ -236,6 +236,7 @@ var Game = {
 		// Collision detection
 		game.physics.arcade.collide(rocketStages[0], platforms);
 		game.physics.arcade.collide(emitterSmoke, platforms);
+		game.physics.arcade.collide(emitterFlame, platforms);
 		for(i=0; i<rocketStages.length - 1; i++){
 			game.physics.arcade.collide(rocketStages[i + 1], rocketStages[i]);
 		}
@@ -341,9 +342,9 @@ var Game = {
 				buttonLabel.text = 'Release stage';
 			}
 			//emitterSmoke.flow(2000, 50, 1000);	// Particles of smoke
-			emitterSmoke.flow(2000, 250, 100);	// Particles of smoke
 			//emitterSmoke.explode(3000, 2000);
 			emitterFlame.flow(1000, 25, 10);	// Particles of flame
+			emitterSmoke.flow(2000, 250, 100);	// Particles of smoke
 			rocketLaunched = true;
 		}else{
 			console.log('Next stage released');
