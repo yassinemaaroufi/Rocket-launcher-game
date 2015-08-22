@@ -18,6 +18,7 @@ var AIR_DRAG = 100;
 var MAX_VELOCITY = 500;
 var LOCAL_GRAVITY = 100;
 var DEFAULT_ACCELERATION = -500;
+var DEFAULT_CAMERA_EASING = 1/10;
 var ROCKET_X_START_POSITION = GAME_WIDTH/2;
 var ROCKET_CONF = {
 	'test':{
@@ -48,6 +49,9 @@ var inGameMenu;
 var currentRocket = 'test';
 var currentLaunchpad = 'test';
 
+var cameraTarget;
+var cameraTargetDistance;
+var rocketLength;
 var rocktLaunched;
 var rocketStages;
 var rocketPayLoad;
@@ -173,10 +177,21 @@ var Game = {
 
 		// Camera
 		if(rocketStages.length == 1){
-			game.camera.follow(rocketStages[0]);
+			//game.camera.follow(rocketStages[0]);
 		}else{
-			game.camera.follow(rocketStages[Math.round(rocketStages.length/2)]);
+			//game.camera.follow(rocketStages[Math.round(rocketStages.length/2)]);
 		}
+
+		// Invisible camera target
+		rocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
+		var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
+		cameraTarget = game.add.sprite(0, 0, 'rocket');
+		cameraTarget.frame = ROCKET_CONF[currentRocket]['payLoadFrame'];
+		cameraTarget.x = ROCKET_X_START_POSITION - cameraTarget.width/2;
+		cameraTarget.y = targetY - cameraTarget.height/2;
+		cameraTarget.alpha = 0;
+		game.camera.follow(cameraTarget);
+		cameraTargetDistance = 0;
 
 		// Controls
 		//cursors = game.input.keyboard.createCursorKeys();
@@ -219,6 +234,36 @@ var Game = {
 			game.physics.arcade.collide(rocketStages[i + 1], rocketStages[i]);
 		}
 
+		// Camera alternative
+		var cameraY;
+		if(rocketStages.length > 0){
+			var rocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
+			var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
+			//cameraTarget.y = targetY - cameraTarget.height/2;
+			cameraY = targetY - cameraTarget.height/2;
+
+			/*cameraTarget.y = targetY - cameraTarget.height/2;
+			var newRocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
+			if(rocketLength < newRocketLength){
+				var d = rocketLength - newRocketLength;
+				cameraTarget.y += (d/2)/10 + rocketStages[0].body.velocity.y;
+			}else{
+				rocketLength = newRocketLength;
+				var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
+				cameraTarget.y = targetY - cameraTarget.height/2;
+			}*/
+		}else{
+			//cameraTarget.y = rocketPayLoad.y;
+			cameraY = rocketPayLoad.y;
+		}
+		if(cameraTargetDistance > 0){
+			//cameraTargetDistance -= cameraTargetDistance/100;
+			cameraTargetDistance -= DEFAULT_CAMERA_EASING;
+			//cameraTarget.y += cameraTargetDistance; 
+			cameraY += cameraTargetDistance; 
+		}
+		cameraTarget.y = cameraY;
+
 		// Altitude indicator
 		if(rocketLaunched){
 			if(rocketStages.length > 0){
@@ -229,19 +274,27 @@ var Game = {
 			altitudeGaugeText.text = 'Altitude: ' + scoreAltitude;
 		}
 
-		// Scores
+		// Scores + game end at highest altitude
 		if(rocketLaunched){
 			if(scoreMaxAltitude <= scoreAltitude ){ 
 				scoreMaxAltitude = scoreAltitude; 
 				if(game.camera.target === null){
-					game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
+					game.camera.follow(cameraTarget);
+					//game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
+					//this.changeCameraTarget(rocketStages[Math.round((rocketStages.length-1)/2)]);
 				}
 			}
 			else{ 
 				// Fix camera
 				game.camera.follow(null);
+
 				// Display scores and menu
+				// - Fuel use efficiency, wasted fuel, unused fuel: You didn't use x% of your fuel
+				// - Altitude
+				// > Replay button
+				// > Menu button
 				altitudeGaugeText.text = 'Altitude: ' + scoreMaxAltitude;
+	
 				// Save scores
 			}
 		}
@@ -298,9 +351,11 @@ var Game = {
 			var stageHeight = rocketStages[0].y;
 			var lastStage = rocketStages[0];
 			rocketStages[0].body.acceleration.y = 0;
+			cameraTargetDistance += rocketStages[0].height/2;	// For camera easing
 			rocketStages.shift();
 			if(rocketStages.length > 0){
-				game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
+				//game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
+				//this.changeCameraTarget(rocketStages[Math.round((rocketStages.length-1)/2)]);
 
 				// Acceleration for the next stage
 				rocketStages[0].body.acceleration.y = DEFAULT_ACCELERATION;
@@ -318,13 +373,24 @@ var Game = {
 				rocketPayLoad.y = stageHeight;
 				game.physics.arcade.enable(rocketPayLoad);
 				rocketPayLoad.body.velocity.y = stageVelocity;
-				game.camera.follow(rocketPayLoad);
+				//game.camera.follow(rocketPayLoad);
+				//this.changeCameraTarget(rocketPayLoad);
 				lastStage.bringToTop();
+				cameraTargetDistance -= rocketPayLoad.height/2;	// For camera easing
 				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ rocketPayLoad.body.acceleration.y = 0; }, this);
 			}
 			currentRocketStage++;
 		}
 	},
+	/*changeCameraTarget : function(target){
+		// Tween from current to new target y coordinate
+		game.camera.follow(null);
+		if(target !== null){
+			var tween = game.add.tween(game.camera);
+			tween.to({y:target.y}, 50);
+			tween.onComplete.add( function(target){game.camera.follow(target);}, this );
+		}
+	},*/
 	unpause : function(event){
         if(game.paused){
             // Calculate the coordinates of the menu
