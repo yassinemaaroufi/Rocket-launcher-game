@@ -213,6 +213,7 @@ var Game = {
 		
 		},
 	update: function(){
+		// Collision detection
 		game.physics.arcade.collide(rocketStages[0], platforms);
 		for(i=0; i<rocketStages.length - 1; i++){
 			game.physics.arcade.collide(rocketStages[i + 1], rocketStages[i]);
@@ -229,12 +230,21 @@ var Game = {
 		}
 
 		// Scores
-		if(scoreMaxAltitude < scoreAltitude ){ scoreMaxAltitude = scoreAltitude; }
-		else{ 
-			// Fix camera
-		   	// Display scores and menu
-			// Save scores
-	   	}
+		if(rocketLaunched){
+			if(scoreMaxAltitude <= scoreAltitude ){ 
+				scoreMaxAltitude = scoreAltitude; 
+				if(game.camera.target === null){
+					game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
+				}
+			}
+			else{ 
+				// Fix camera
+				game.camera.follow(null);
+				// Display scores and menu
+				altitudeGaugeText.text = 'Altitude: ' + scoreMaxAltitude;
+				// Save scores
+			}
+		}
 
 		// Fuel management
 		if(rocketLaunched && currentRocketStage < fuelGauges.length && fuelGauges[currentRocketStage] > 0){
