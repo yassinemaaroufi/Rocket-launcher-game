@@ -14,10 +14,13 @@ Animation & graphics
 --------------------
 * Smoke/fumes and reactor flames
 * Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
+* Rocket fairing removal animation when deploy payload
 * Apply a mask to the background: gets darker at the same time as higher altitude
 * Background sprites: Clouds, stars, birds, debris (boots, banana, ), astronaut, etoile filante
 * Background: atmosphere, stratosphere, space
 * Other buttons: menu, shop
+* Display stage exhausts when releasing stage
+* Display altitude ladder in the background
 * Customization: 
 	* stickers on the rocket: flag, logo (nasa, companies, etc.), other (peace, etc.)
 	* Colors
@@ -25,6 +28,9 @@ Animation & graphics
 Game mechanics
 --------------
 * Implement boosters as a stage
+* Random payload appears at each attempt
+	* Green alien, Nuke, Tux, boot
+	* Capsule, Probe, satellite, etc.
 * Achievements & scores
 	* Scores: Highest altitude, Number of attempts, fuel use
 	* Achievements/misions
@@ -60,6 +66,7 @@ Game mechanics
 	* Seaport: 
 		* https://en.wikipedia.org/wiki/Broglio_Space_Centre
 		* SeaLaunch: https://en.wikipedia.org/wiki/Sea_Launch
+* Unlock new payloads
 
 Audio
 -----

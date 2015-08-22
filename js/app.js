@@ -17,7 +17,7 @@ var GRAVITY = 100;
 var AIR_DRAG = 100;
 var MAX_VELOCITY = 500;
 var LOCAL_GRAVITY = 100;
-var DEFAULT_ACCELERATION = -500;
+var DEFAULT_ACCELERATION = -400;
 var DEFAULT_CAMERA_EASING = 1/10;
 var ROCKET_X_START_POSITION = GAME_WIDTH/2;
 var ROCKET_CONF = {
@@ -56,6 +56,7 @@ var rocktLaunched;
 var rocketStages;
 var rocketPayLoad;
 var currentRocketStage;
+var emitter;
 var fuelGauges;
 var fuelGaugesText;
 var altitudeGaugeText;
@@ -104,6 +105,7 @@ var Game = {
 		game.load.atlas('launchpad', ATLAS_SRC + 'launchpad.png', ATLAS_SRC + 'launchpad.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.atlas('launchpad-bg', ATLAS_SRC + 'launchpad-bg.png', ATLAS_SRC + 'launchpad-bg.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
+    	game.load.image('smoke', 'assets/sprites/particles/smoke.png');
 	},
 	create: function(){
 		
@@ -193,6 +195,19 @@ var Game = {
 		game.camera.follow(cameraTarget);
 		cameraTargetDistance = 0;
 
+		// Particles
+		emitter = game.add.emitter(ROCKET_X_START_POSITION, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
+		emitter.makeParticles('smoke');
+		emitter.setXSpeed(-100, 100);
+		emitter.setYSpeed(-50, 0);
+		//emitter.minParticleSpeed.setTo(-100, -50);
+	    //emitter.maxParticleSpeed.setTo(100, 0);
+		emitter.minParticleScale = 0.1;
+	    emitter.maxParticleScale = 2.5;
+		emitter.gravity = -100;
+		//emitter.enableBody = true;
+
+
 		// Controls
 		//cursors = game.input.keyboard.createCursorKeys();
 
@@ -203,33 +218,11 @@ var Game = {
 		buttonLabel.cameraOffset.setTo(0, GAME_HEIGHT/2 - 25);
 
 
-		// Pause game
-		// Create a layout for the game menu and dialog boxes
-		// In-game menu
-		/*pauseButton = game.add.text(GAME_WIDTH - 100, 20, 'Pause', { font: '24px Arial', fill: '#fff' });
-		pauseButton.fixedToCamera = true;
-		pauseButton.cameraOffset.setTo(GAME_WIDTH - 100, 20);
-    	pauseButton.inputEnabled = true;
-    	pauseButton.events.onInputUp.add(function () {
-			if(game.paused){
-				game.paused = false;
-				pauseButton.text = 'Pause';
-			}else{
-        		game.paused = true;
-				pauseButton.text = 'Resume';
-				
-				// Then add the menu
-				inGameMenu = game.add.sprite(GAME_WIDTH/2, GAME_HEIGHT/2, 'in-game-menu');
-				inGameMenu.anchor.setTo(0.5, 0.5);
-			}
-				
-			});
-		game.input.onDown.add(this.unpause, self);*/
-		
 		},
 	update: function(){
 		// Collision detection
 		game.physics.arcade.collide(rocketStages[0], platforms);
+		game.physics.arcade.collide(emitter, platforms);
 		for(i=0; i<rocketStages.length - 1; i++){
 			game.physics.arcade.collide(rocketStages[i + 1], rocketStages[i]);
 		}
@@ -239,27 +232,13 @@ var Game = {
 		if(rocketStages.length > 0){
 			var rocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
 			var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
-			//cameraTarget.y = targetY - cameraTarget.height/2;
 			cameraY = targetY - cameraTarget.height/2;
 
-			/*cameraTarget.y = targetY - cameraTarget.height/2;
-			var newRocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
-			if(rocketLength < newRocketLength){
-				var d = rocketLength - newRocketLength;
-				cameraTarget.y += (d/2)/10 + rocketStages[0].body.velocity.y;
-			}else{
-				rocketLength = newRocketLength;
-				var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
-				cameraTarget.y = targetY - cameraTarget.height/2;
-			}*/
 		}else{
-			//cameraTarget.y = rocketPayLoad.y;
 			cameraY = rocketPayLoad.y;
 		}
 		if(cameraTargetDistance > 0){
-			//cameraTargetDistance -= cameraTargetDistance/100;
 			cameraTargetDistance -= DEFAULT_CAMERA_EASING;
-			//cameraTarget.y += cameraTargetDistance; 
 			cameraY += cameraTargetDistance; 
 		}
 		cameraTarget.y = cameraY;
@@ -343,6 +322,9 @@ var Game = {
 			}else{
 				buttonLabel.text = 'Release stage';
 			}
+			//emitter.flow(2000, 50, 1000);	// Particles of smoke
+			emitter.flow(2000, 250, 100);	// Particles of smoke
+			//emitter.explode(3000, 2000);
 			rocketLaunched = true;
 		}else{
 			console.log('Next stage released');
