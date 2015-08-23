@@ -308,6 +308,7 @@ var Game = {
 		// Reactor flames particles position
 		if(rocketStages.length > 0){
 			emitterFlame.y = rocketStages[0].y + rocketStages[0].height;
+			emitterFlame.width = rocketStages[0].width;
 		}
 
 		
@@ -343,7 +344,7 @@ var Game = {
 			}
 			//emitterSmoke.flow(2000, 50, 1000);	// Particles of smoke
 			//emitterSmoke.explode(3000, 2000);
-			emitterFlame.flow(1000, 25, 10);	// Particles of flame
+			emitterFlame.flow(1000, 50, 10);	// Particles of flame
 			emitterSmoke.flow(2000, 250, 100);	// Particles of smoke
 			rocketLaunched = true;
 		}else{
@@ -379,21 +380,13 @@ var Game = {
 				//this.changeCameraTarget(rocketPayLoad);
 				lastStage.bringToTop();
 				cameraTargetDistance -= rocketPayLoad.height/2;	// For camera easing
-				emitterFlame.destroy();
+				//emitterFlame.destroy();
+				emitterFlame.on = false;
 				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ rocketPayLoad.body.acceleration.y = 0; }, this);
 			}
 			currentRocketStage++;
 		}
 	},
-	/*changeCameraTarget : function(target){
-		// Tween from current to new target y coordinate
-		game.camera.follow(null);
-		if(target !== null){
-			var tween = game.add.tween(game.camera);
-			tween.to({y:target.y}, 50);
-			tween.onComplete.add( function(target){game.camera.follow(target);}, this );
-		}
-	},*/
 	unpause : function(event){
         if(game.paused){
             // Calculate the coordinates of the menu
