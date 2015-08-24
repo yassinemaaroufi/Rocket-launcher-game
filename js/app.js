@@ -305,6 +305,7 @@ var Game = {
 		if(fuelGauges[currentRocketStage] <= 0){
 			for(i in rocketStages){
 				rocketStages[i].body.acceleration.y = 0;
+				emitterFlame.on = false;
 			}
 
 		}
@@ -358,8 +359,6 @@ var Game = {
 			}else{
 				buttonLabel.text = 'Release stage';
 			}
-			//emitterSmoke.flow(2000, 50, 1000);	// Particles of smoke
-			//emitterSmoke.explode(3000, 2000);
 			emitterFlame.flow(1000, 50, 10);	// Particles of flame
 			emitterSmoke.flow(2000, 250, 100);	// Particles of smoke
 			rocketLaunched = true;
@@ -378,6 +377,7 @@ var Game = {
 
 				// Acceleration for the next stage
 				rocketStages[0].body.acceleration.y = DEFAULT_ACCELERATION;
+				emitterFlame.on = true;
 				if(rocketStages.length == 1){ 
 					buttonLabel.text = 'Deploy payload';
 				}

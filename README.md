@@ -13,13 +13,14 @@ TODO
 Animation & graphics
 --------------------
 * Smoke/fumes and reactor flames
-* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
-* Rocket fairing removal animation when deploy payload
+* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound <---------------------
+* Rocket fairing removal animation when deploy payload		<----------------------------------------
+* Payload stays at the highest altitude/ doesn't fall?
+* Display stage exhausts when releasing stage
 * Apply a mask to the background: gets darker at the same time as higher altitude
 * Background sprites: Clouds, stars, birds, debris (boots, banana, ), astronaut, etoile filante
 * Background: atmosphere, stratosphere, space
 * Other buttons: menu, shop
-* Display stage exhausts when releasing stage
 * Display altitude ladder in the background
 * Customization: 
 	* stickers on the rocket: flag, logo (nasa, companies, etc.), other (peace, etc.)
@@ -28,7 +29,7 @@ Animation & graphics
 
 Game mechanics
 --------------
-* Implement boosters as a stage
+* Implement boosters as a stage			<------------------------------------------------------------------
 * Random payload appears at each attempt
 	* Green alien, Nuke, Tux, boot
 	* Capsule, Probe, satellite, etc.
