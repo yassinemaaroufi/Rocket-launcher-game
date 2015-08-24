@@ -61,6 +61,7 @@ var emitterFlame;
 var fuelGauges;
 var fuelGaugesText;
 var altitudeGaugeText;
+var payloadDeployed;
 
 var scoreAltitude;
 var scoreMaxAltitude;
@@ -108,6 +109,8 @@ var Game = {
 		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
     	game.load.image('smoke', 'assets/sprites/particles/smoke.png');
     	game.load.image('flame', 'assets/sprites/particles/flame.png');
+    	game.load.image('replay-button', 'assets/sprites/buttons/replay.png');
+    	game.load.image('back-menu-button', 'assets/sprites/buttons/back-to-menu.png');
 	},
 	create: function(){
 		
@@ -167,6 +170,7 @@ var Game = {
 		rocketStages = [];
 		currentRocketStage = 0;
 		rocketLaunched = false;
+		payloadDeployed = false;
 
 		//for(i=0; i<ROCKET_STAGES; i++){
 		for(i=0; i<ROCKET_CONF[currentRocket]['stages']; i++){
@@ -310,7 +314,19 @@ var Game = {
 			emitterFlame.y = rocketStages[0].y + rocketStages[0].height;
 			emitterFlame.width = rocketStages[0].width;
 		}
+		
+		// Game end
+		if(rocketLaunched && payloadDeployed && rocketPayLoad.y > game.camera.y + GAME_HEIGHT){
+			game.time.events.add(Phaser.Timer.SECOND * 1, 
+					function(){
+				var gameEndButton = this.setupActionButton(GAME_WIDTH/2 - 64, GAME_HEIGHT/3, 
+						'replay-button', function(){this.state.start("GAME")}, this, 0, 1);
+				var gameEndButton = this.setupActionButton(GAME_WIDTH/2, GAME_HEIGHT/3, 
+						'back-menu-button', function(){this.state.start("MENU")}, this, 0, 1);
+			}, this);
 
+
+		}
 		
 		
 	},
@@ -368,6 +384,7 @@ var Game = {
 
 			}else{
 				// Last Stage release (payload)
+				payloadDeployed = true;
 				launchButton.destroy(); 
 				buttonLabel.destroy(); 
 				rocketPayLoad = game.add.sprite(0, 0, 'rocket');

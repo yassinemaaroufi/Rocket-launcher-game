@@ -24,6 +24,7 @@ Animation & graphics
 * Customization: 
 	* stickers on the rocket: flag, logo (nasa, companies, etc.), other (peace, etc.)
 	* Colors
+* Use extracts from real footage
 
 Game mechanics
 --------------
@@ -67,12 +68,14 @@ Game mechanics
 		* https://en.wikipedia.org/wiki/Broglio_Space_Centre
 		* SeaLaunch: https://en.wikipedia.org/wiki/Sea_Launch
 * Unlock new payloads
+	* Card with info about the payload (orion, soyuz, rover, etc.)
 
 Audio
 -----
 * Rocket sounds: rip from video or open game art
 * Stage release sound
 * Launch operator voices: US, chinese, russian see in videos
+* Extract audio from real footage
 
 Other
 -----
