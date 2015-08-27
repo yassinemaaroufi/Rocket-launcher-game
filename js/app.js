@@ -24,7 +24,20 @@ var ROCKET_CONF = {
 	'test':{
 		'stages': 5,
 		'firstFrame': 0,
-		'payLoadFrame': 5
+		'payLoadFrame': 5,
+		'booster': false,
+		'boosterFrame': 0,
+		'boosterRelY': 0,
+		'boosterRelX': 0
+	},
+	'test-booster':{
+		'stages': 5,
+		'firstFrame': 0,
+		'payLoadFrame': 5,
+		'booster': true,
+		'boosterFrame': 4,
+		'boosterRelY': 0,
+		'boosterRelX': -5
 	}
 };
 var LAUNCHPAD_CONF = {
