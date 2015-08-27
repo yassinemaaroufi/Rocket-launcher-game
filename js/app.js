@@ -31,11 +31,11 @@ var ROCKET_CONF = {
 		'boosterRelX': 0
 	},
 	'test-booster':{
-		'stages': 5,
+		'stages': 4,
 		'firstFrame': 0,
 		'payLoadFrame': 5,
 		'booster': true,
-		'boosterFrame': 4,
+		'boosterFrame': 3,
 		'boosterRelY': 0,
 		'boosterRelX': -5
 	}
@@ -59,7 +59,7 @@ var layer;
 var pauseButton;
 var inGameMenu;
 
-var currentRocket = 'test';
+var currentRocket = 'test-booster';
 var currentLaunchpad = 'test';
 
 var cameraTarget;
@@ -75,6 +75,7 @@ var fuelGauges;
 var fuelGaugesText;
 var altitudeGaugeText;
 var payloadDeployed;
+var boosterStage;
 
 var scoreAltitude;
 var scoreMaxAltitude;
@@ -114,11 +115,15 @@ var Game = {
     	game.load.image('ground', 'assets/sprites/platform.png'); // Use atlas instead
     	//game.load.spritesheet('test-rocket', 'assets/sprites/rocket.png', 32, 64);
 		//game.load.image('in-game-menu', 'assets/in-game-menu.jpg');
-		//game.load.tilemap('tilemap1', 'assets/tilemaps/maps/launchpad.csv', null, Phaser.Tilemap.CSV);
+		//game.load.tilemap('tilemap1', 'assets/tilemaps/maps/launchpad.csv', 
+		//null, Phaser.Tilemap.CSV);
 		//game.load.image('tileset1', 'assets/tilemaps/tilesets/32x32/tileset2.png');
-		game.load.atlas('rocket', ATLAS_SRC + 'rocket.png', ATLAS_SRC + 'rocket.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-		game.load.atlas('launchpad', ATLAS_SRC + 'launchpad.png', ATLAS_SRC + 'launchpad.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-		game.load.atlas('launchpad-bg', ATLAS_SRC + 'launchpad-bg.png', ATLAS_SRC + 'launchpad-bg.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+		game.load.atlas('rocket', ATLAS_SRC + 'rocket.png', ATLAS_SRC 
+				+ 'rocket.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+		game.load.atlas('launchpad', ATLAS_SRC + 'launchpad.png', ATLAS_SRC 
+				+ 'launchpad.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
+		game.load.atlas('launchpad-bg', ATLAS_SRC + 'launchpad-bg.png', ATLAS_SRC 
+				+ 'launchpad-bg.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
     	game.load.image('smoke', 'assets/sprites/particles/smoke.png');
     	game.load.image('flame', 'assets/sprites/particles/flame.png');
@@ -147,7 +152,8 @@ var Game = {
 		//layer.resizeWorld();
 
 		// Launchpad background
-		var launchpadBg = game.add.sprite(0, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['bgHeight'], 'launchpad-bg');
+		var launchpadBg = game.add.sprite(0, game.world.height - FLOOR_HEIGHT 
+				- LAUNCHPAD_CONF[currentLaunchpad]['bgHeight'], 'launchpad-bg');
 		launchpadBg.frame = LAUNCHPAD_CONF[currentLaunchpad]['frame'];
 		launchpadBg.x = ROCKET_X_START_POSITION - launchpadBg.width/2;
 
@@ -159,14 +165,16 @@ var Game = {
 		ground.body.allowGravity = false;
 
 		// Launchpad
-		var launchpad = platforms.create(0, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['height'], 'launchpad');
+		var launchpad = platforms.create(0, game.world.height - FLOOR_HEIGHT 
+				- LAUNCHPAD_CONF[currentLaunchpad]['height'], 'launchpad');
 		launchpad.frame = LAUNCHPAD_CONF[currentLaunchpad]['frame'];
 		launchpad.x = ROCKET_X_START_POSITION - launchpad.width/2;
 		launchpad.body.immovable = true;
 		launchpad.body.allowGravity = false;
 
 		// Indicators (altitude, thrust, )
-		altitudeGaugeText = game.add.text(0, 0, 'Altitude: 0', { fontSize: '14px', fill: '#fff' });
+		altitudeGaugeText = game.add.text(0, 0, 'Altitude: 0', 
+				{ fontSize: '14px', fill: '#fff' });
 		altitudeGaugeText.fixedToCamera = true;
 		altitudeGaugeText.cameraOffset.setTo(10, 30);
 
@@ -178,7 +186,8 @@ var Game = {
 		fuelGauges = [];
 		fuelGaugesText = [];
 		// Rocket
-		var rocketHeight = game.world.height - FLOOR_HEIGHT - LAUNCHPAD_CONF[currentLaunchpad]['height'];
+		var rocketHeight = game.world.height - FLOOR_HEIGHT - 
+			LAUNCHPAD_CONF[currentLaunchpad]['height'];
 
 		rocketStages = [];
 		currentRocketStage = 0;
@@ -188,23 +197,38 @@ var Game = {
 		//for(i=0; i<ROCKET_STAGES; i++){
 		for(i=0; i<ROCKET_CONF[currentRocket]['stages']; i++){
 			fuelGauges.push(100);
-			fuelGaugesText.push(game.add.text(0, 0, '100%', { fontSize: '14px', fill: '#fff' }));
+			fuelGaugesText.push(game.add.text(0, 0, '100%', 
+						{ fontSize: '14px', fill: '#fff' }));
 			fuelGaugesText[i].fixedToCamera = true;
 			fuelGaugesText[i].cameraOffset.setTo(10 + 40*i, 10);
 
-			rocketStages.push(this.setupRocketStage('rocket', ROCKET_CONF[currentRocket]['firstFrame'] + i, rocketHeight));
+			rocketStages.push(this.setupRocketStage('rocket', 
+						ROCKET_CONF[currentRocket]['firstFrame'] + i, rocketHeight));
 			rocketHeight = rocketStages[i].y;
+
 		}
 
-		// Camera
-		if(rocketStages.length == 1){
-			//game.camera.follow(rocketStages[0]);
-		}else{
-			//game.camera.follow(rocketStages[Math.round(rocketStages.length/2)]);
+		rocketHeight = game.world.height - FLOOR_HEIGHT - 
+			LAUNCHPAD_CONF[currentLaunchpad]['height'];
+
+		if(ROCKET_CONF[currentRocket]['booster']){
+			boosterStage = [
+				this.setupRocketStage('rocket', 
+						ROCKET_CONF[currentRocket]['boosterFrame'], 
+						rocketHeight - ROCKET_CONF[currentRocket]['boosterRelY']),
+				this.setupRocketStage('rocket', 
+						ROCKET_CONF[currentRocket]['boosterFrame'], 
+						rocketHeight - ROCKET_CONF[currentRocket]['boosterRelY'])
+				];
+			boosterStage[0].x = ROCKET_X_START_POSITION - rocketStages[0].width/2 
+				- boosterStage[0].width/2 - ROCKET_CONF[currentRocket]['boosterRelX'];
+			boosterStage[1].x = ROCKET_X_START_POSITION + rocketStages[0].width/2 
+				- boosterStage[1].width/2 + ROCKET_CONF[currentRocket]['boosterRelX'];
 		}
 
 		// Invisible camera target
-		rocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
+		rocketLength = (rocketStages[0].y + rocketStages[0].height) 
+			- rocketStages[rocketStages.length-1].y;
 		var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
 		cameraTarget = game.add.sprite(0, 0, 'rocket');
 		cameraTarget.frame = ROCKET_CONF[currentRocket]['payLoadFrame'];
@@ -215,7 +239,8 @@ var Game = {
 		cameraTargetDistance = 0;
 
 		// Particles
-		emitterFlame = game.add.emitter(ROCKET_X_START_POSITION, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
+		emitterFlame = game.add.emitter(ROCKET_X_START_POSITION, game.world.height 
+				- FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
 		emitterFlame.makeParticles('flame');
 		emitterFlame.setXSpeed(0, 0);
 		emitterFlame.setYSpeed(50, 0);
@@ -226,7 +251,8 @@ var Game = {
 		//emitterFlame.gravity = -100;
 		emitterFlame.enableBody = true;
 
-		emitterSmoke = game.add.emitter(ROCKET_X_START_POSITION, game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
+		emitterSmoke = game.add.emitter(ROCKET_X_START_POSITION, game.world.height 
+				- FLOOR_HEIGHT - LAUNCHPAD_HEIGHT, 200);
 		emitterSmoke.makeParticles('smoke');
 		emitterSmoke.setXSpeed(-100, 100);
 		emitterSmoke.setYSpeed(-50, 0);
@@ -242,7 +268,8 @@ var Game = {
 		//cursors = game.input.keyboard.createCursorKeys();
 
 		// Buttons
-		launchButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', this.launchRocket, this, 0, 1);
+		launchButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', 
+				this.launchRocket, this, 0, 1);
 		buttonLabel = game.add.text(0, 0, 'Ignition', { fontSize: '14px', fill: '#fff' });
 		buttonLabel.fixedToCamera = true;
 		buttonLabel.cameraOffset.setTo(0, GAME_HEIGHT/2 - 25);
@@ -251,6 +278,7 @@ var Game = {
 		},
 	update: function(){
 		// Collision detection
+		game.physics.arcade.collide(boosterStage, platforms);
 		game.physics.arcade.collide(rocketStages[0], platforms);
 		game.physics.arcade.collide(emitterSmoke, platforms);
 		game.physics.arcade.collide(emitterFlame, platforms);
@@ -261,7 +289,8 @@ var Game = {
 		// Camera alternative
 		var cameraY;
 		if(rocketStages.length > 0){
-			var rocketLength = (rocketStages[0].y + rocketStages[0].height) - rocketStages[rocketStages.length-1].y;
+			var rocketLength = (rocketStages[0].y + rocketStages[0].height) 
+				- rocketStages[rocketStages.length-1].y;
 			var targetY = rocketStages[rocketStages.length-1].y + rocketLength/2;
 			cameraY = targetY - cameraTarget.height/2;
 
@@ -277,7 +306,8 @@ var Game = {
 		// Altitude indicator
 		if(rocketLaunched){
 			if(rocketStages.length > 0){
-				scoreAltitude = Math.floor(game.world.height - rocketStages[rocketStages.length-1].y);
+				scoreAltitude = Math.floor(game.world.height 
+						- rocketStages[rocketStages.length-1].y);
 			}else{
 				scoreAltitude = Math.floor(game.world.height - rocketPayLoad.y);
 			}
@@ -310,9 +340,11 @@ var Game = {
 		}
 
 		// Fuel management
-		if(rocketLaunched && currentRocketStage < fuelGauges.length && fuelGauges[currentRocketStage] > 0){
+		if(rocketLaunched && currentRocketStage < fuelGauges.length 
+				&& fuelGauges[currentRocketStage] > 0){
 			fuelGauges[currentRocketStage]--;
-			fuelGaugesText[currentRocketStage].text = Math.round(fuelGauges[currentRocketStage]) + '%'
+			fuelGaugesText[currentRocketStage].text = 
+				Math.round(fuelGauges[currentRocketStage]) + '%'
 		}
 
 		if(fuelGauges[currentRocketStage] <= 0){
@@ -330,7 +362,8 @@ var Game = {
 		}
 		
 		// Game end
-		if(rocketLaunched && payloadDeployed && rocketPayLoad.y > game.camera.y + GAME_HEIGHT){
+		if(rocketLaunched && payloadDeployed && rocketPayLoad.y > game.camera.y 
+				+ GAME_HEIGHT){
 			game.time.events.add(Phaser.Timer.SECOND * 1, 
 					function(){
 				var gameEndButton = this.setupActionButton(GAME_WIDTH/2 - 64, GAME_HEIGHT/3, 
@@ -345,7 +378,8 @@ var Game = {
 		
 	},
 	setupActionButton : function(x, y, spritesheet, func, ctx, frameUp, frameDown){
-		var button = game.add.button(0, 0, spritesheet, func, ctx, frameUp, frameUp, frameDown, frameUp);
+		var button = game.add.button(0, 0, spritesheet, func, ctx, frameUp, frameUp, 
+				frameDown, frameUp);
 		button.fixedToCamera = true;
 		button.cameraOffset.setTo(x, y);
 		return button;
@@ -412,7 +446,8 @@ var Game = {
 				cameraTargetDistance -= rocketPayLoad.height/2;	// For camera easing
 				//emitterFlame.destroy();
 				emitterFlame.on = false;
-				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ rocketPayLoad.body.acceleration.y = 0; }, this);
+				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ 
+					rocketPayLoad.body.acceleration.y = 0; }, this);
 			}
 			currentRocketStage++;
 		}

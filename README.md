@@ -10,12 +10,22 @@ Launch rocket to the highest possible altitude
 TODO
 ====
 
+>> See: http://www.rocketgame.org/online/wonder-rocket-2-game.html
+
 Animation & graphics
 --------------------
-* Smoke/fumes and reactor flames
-* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound <---------------------
+* Buttons
+	* 
+	* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
+* Smoke & fire from real footage
+	* https://www.youtube.com/watch?v=OOwD1O8LzKI (baikonour/proton) 1080p
+	* https://www.youtube.com/watch?v=XfJoDxX0m7s (spacex falcon 9) 1080p
+	* https://www.youtube.com/watch?v=ET77XZYTU3c (baikonour/proton)
+	* https://www.youtube.com/watch?v=LndYEpfr1UA (shenzhou-10) 480p
+	> vid to img: ffmpeg -i "input.mov" -an -f image2 "output_%05d.jpg"
+	> vid to img: mplayer -vo png:z=6 video.avi
+	> vid to img: mplayer -vo null -ao null -frames 0 -identify file.avi > mplayer -vo jpeg -sstep 5 -endpos 145 file.avi
 * Rocket fairing removal animation when deploy payload		<----------------------------------------
-* Payload stays at the highest altitude/ doesn't fall?
 * Display stage exhausts when releasing stage
 * Apply a mask to the background: gets darker at the same time as higher altitude
 * Background sprites: Clouds, stars, birds, debris (boots, banana, ), astronaut, etoile filante
@@ -26,10 +36,12 @@ Animation & graphics
 	* stickers on the rocket: flag, logo (nasa, companies, etc.), other (peace, etc.)
 	* Colors
 * Use extracts from real footage
+* Better cockpit from real cockpit images
 
 Game mechanics
 --------------
 * Implement boosters as a stage			<------------------------------------------------------------------
+* In-game gif maker + gif sharing module
 * Random payload appears at each attempt
 	* Green alien, Nuke, Tux, boot
 	* Capsule, Probe, satellite, etc.
