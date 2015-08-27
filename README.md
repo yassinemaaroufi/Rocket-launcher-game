@@ -12,6 +12,16 @@ TODO
 
 >> See: http://www.rocketgame.org/online/wonder-rocket-2-game.html
 
+Main
+----
+* Implement booster stage
+	* Add to screen [DONE]
+	* Collision detection with ground [DONE]
+	* Add acceleration on launch
+	* Add release on button push
+	* Add fuel gauge
+	* Adapt flame emitter width
+
 Animation & graphics
 --------------------
 * Buttons
@@ -40,7 +50,6 @@ Animation & graphics
 
 Game mechanics
 --------------
-* Implement boosters as a stage			<------------------------------------------------------------------
 * In-game gif maker + gif sharing module
 * Random payload appears at each attempt
 	* Green alien, Nuke, Tux, boot
