@@ -17,10 +17,11 @@ Main
 * Implement booster stage
 	* Add to screen [DONE]
 	* Collision detection with ground [DONE]
-	* Add acceleration on launch
-	* Add release on button push
-	* Add fuel gauge
+	* Add acceleration on launch [DONE]
+	* Add release on button push [DONE]
+	* Add fuel gauge [DONE]
 	* Adapt flame emitter width
+	* Fix difference in travel speed (due to mass maybe?)
 
 Animation & graphics
 --------------------
