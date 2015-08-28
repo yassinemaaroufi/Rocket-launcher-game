@@ -76,6 +76,10 @@ var fuelGaugesText;
 var altitudeGaugeText;
 var payloadDeployed;
 var boosterStage;
+var boosterStageReleased;
+var boosterGauge;
+var boosterGaugeText;
+var gameEnded;
 
 var scoreAltitude;
 var scoreMaxAltitude;
@@ -137,6 +141,7 @@ var Game = {
 		game.world.setBounds(0, 0, 320, 32000);
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		game.physics.arcade.gravity.y = GRAVITY;
+		gameEnded = false;
 
 		//ROCKET_X_START_POSITION = game.world.width/2;
 
@@ -193,6 +198,18 @@ var Game = {
 		currentRocketStage = 0;
 		rocketLaunched = false;
 		payloadDeployed = false;
+		boosterStageReleased = false;
+		
+		// Booster Fuel Gauge
+		var boosterGaugeTextSpace = 0;
+		if(ROCKET_CONF[currentRocket]['booster']){
+			boosterGauge = 100;
+			boosterGaugeText = game.add.text(0, 0, '100%', 
+						{ fontSize: '14px', fill: '#fff' });
+			boosterGaugeText.fixedToCamera = true;
+			boosterGaugeTextSpace = 40;
+			boosterGaugeText.cameraOffset.setTo(10, 10);
+		}
 
 		//for(i=0; i<ROCKET_STAGES; i++){
 		for(i=0; i<ROCKET_CONF[currentRocket]['stages']; i++){
@@ -200,7 +217,7 @@ var Game = {
 			fuelGaugesText.push(game.add.text(0, 0, '100%', 
 						{ fontSize: '14px', fill: '#fff' }));
 			fuelGaugesText[i].fixedToCamera = true;
-			fuelGaugesText[i].cameraOffset.setTo(10 + 40*i, 10);
+			fuelGaugesText[i].cameraOffset.setTo(boosterGaugeTextSpace + 10 + 40*i, 10);
 
 			rocketStages.push(this.setupRocketStage('rocket', 
 						ROCKET_CONF[currentRocket]['firstFrame'] + i, rocketHeight));
@@ -336,23 +353,51 @@ var Game = {
 				altitudeGaugeText.text = 'Altitude: ' + scoreMaxAltitude;
 	
 				// Save scores
+				// Game end
+				if(!gameEnded){
+					if((payloadDeployed && rocketPayLoad.y > game.camera.y + GAME_HEIGHT)
+						|| !payloadDeployed && rocketStages[rocketStages.length-1].y > game.camera.y + GAME_HEIGHT){
+						console.log('Game end');
+						gameEnded = true;
+						launchButton.destroy(); 
+						buttonLabel.destroy(); 
+						this.endGame();
+					}
+				}
 			}
 		}
 
 		// Fuel management
-		if(rocketLaunched && currentRocketStage < fuelGauges.length 
-				&& fuelGauges[currentRocketStage] > 0){
-			fuelGauges[currentRocketStage]--;
-			fuelGaugesText[currentRocketStage].text = 
-				Math.round(fuelGauges[currentRocketStage]) + '%'
+		if(rocketLaunched){
+			if(ROCKET_CONF[currentRocket]['booster'] && !boosterStageReleased){
+				if(boosterGauge > 0){
+					boosterGauge--;
+					boosterGaugeText.text = Math.round(boosterGauge) + '%';
+				}
+			}else{
+				if(currentRocketStage < fuelGauges.length 
+					&& fuelGauges[currentRocketStage] > 0){
+					fuelGauges[currentRocketStage]--;
+					fuelGaugesText[currentRocketStage].text = 
+						Math.round(fuelGauges[currentRocketStage]) + '%';
+				}
+			}
 		}
 
 		if(fuelGauges[currentRocketStage] <= 0){
 			for(i in rocketStages){
 				rocketStages[i].body.acceleration.y = 0;
-				emitterFlame.on = false;
 			}
-
+			emitterFlame.on = false;
+		}
+		if(boosterGauge <= 0 && !boosterStageReleased){
+			for(i in boosterStage){
+				boosterStage[i].body.acceleration.y = 0;
+			}
+			for(i in rocketStages){
+				rocketStages[i].body.acceleration.y = 0;
+			}
+			emitterFlame.on = false;
 		}
 
 		// Reactor flames particles position
@@ -362,20 +407,27 @@ var Game = {
 		}
 		
 		// Game end
-		if(rocketLaunched && payloadDeployed && rocketPayLoad.y > game.camera.y 
-				+ GAME_HEIGHT){
-			game.time.events.add(Phaser.Timer.SECOND * 1, 
-					function(){
-				var gameEndButton = this.setupActionButton(GAME_WIDTH/2 - 64, GAME_HEIGHT/3, 
-						'replay-button', function(){this.state.start("GAME")}, this, 0, 1);
-				var gameEndButton = this.setupActionButton(GAME_WIDTH/2, GAME_HEIGHT/3, 
-						'back-menu-button', function(){this.state.start("MENU")}, this, 0, 1);
+		/*if(rocketLaunched){
+			if(payloadDeployed && rocketPayLoad.y > game.camera.y + GAME_HEIGHT){
+				this.endGame();
+			}
+			if(!payloadDeployed && rocketStages[0].y > game.world.height - FLOOR_HEIGHT 
+			   - LAUNCHPAD_CONF[currentLaunchpad]['height'] - rocketStages[0].height){ 
+				this.endGame();
+			}
+			if(!payloadDeployed && !boosterStageReleased && boosterStage[0].y > game.world.height - FLOOR_HEIGHT 
+			   - LAUNCHPAD_CONF[currentLaunchpad]['height'] - boosterStage[0].height){
+				this.endGame();
+			}
+		}*/
+	},
+	endGame : function(){
+		game.time.events.add(Phaser.Timer.SECOND * 1, function(){
+			var gameEndButton = this.setupActionButton(GAME_WIDTH/2 - 64, GAME_HEIGHT/3, 
+					'replay-button', function(){this.state.start("GAME")}, this, 0, 1);
+			gameEndButton = this.setupActionButton(GAME_WIDTH/2, GAME_HEIGHT/3, 
+					'back-menu-button', function(){this.state.start("MENU")}, this, 0, 1);
 			}, this);
-
-
-		}
-		
-		
 	},
 	setupActionButton : function(x, y, spritesheet, func, ctx, frameUp, frameDown){
 		var button = game.add.button(0, 0, spritesheet, func, ctx, frameUp, frameUp, 
@@ -401,23 +453,46 @@ var Game = {
 				rocketStages[i].body.drag.set(AIR_DRAG);
 				rocketStages[i].body.maxVelocity.set(MAX_VELOCITY); // Extract max velocity value according to module characteristics
 			}
+			if(ROCKET_CONF[currentRocket]['booster']){
+				for(i in boosterStage){
+					boosterStage[i].body.acceleration.y = DEFAULT_ACCELERATION;
+					boosterStage[i].body.gravity.y = LOCAL_GRAVITY;
+					boosterStage[i].body.drag.set(AIR_DRAG);
+					boosterStage[i].body.maxVelocity.set(MAX_VELOCITY);
+				}
+			}
 			if(rocketStages.length == 1){ 
 				buttonLabel.text = 'Deploy payload';
 			}else{
 				buttonLabel.text = 'Release stage';
 			}
+			
 			emitterFlame.flow(1000, 50, 10);	// Particles of flame
 			emitterSmoke.flow(2000, 250, 100);	// Particles of smoke
 			rocketLaunched = true;
 		}else{
 			console.log('Next stage released');
-
-			var stageVelocity = rocketStages[0].body.velocity.y;
-			var stageHeight = rocketStages[0].y;
-			var lastStage = rocketStages[0];
-			rocketStages[0].body.acceleration.y = 0;
-			cameraTargetDistance += rocketStages[0].height/2;	// For camera easing
-			rocketStages.shift();
+			
+			if(!ROCKET_CONF[currentRocket]['booster'] || boosterStageReleased){
+				currentRocketStage++;
+			}
+			
+			if(ROCKET_CONF[currentRocket]['booster'] && !boosterStageReleased){
+				for(i in boosterStage){
+					boosterStage[i].body.acceleration.y = 0;
+				}
+				boosterStageReleased = true;
+			}else{
+				
+			
+				var stageVelocity = rocketStages[0].body.velocity.y;
+				var stageHeight = rocketStages[0].y;
+				var lastStage = rocketStages[0];
+				rocketStages[0].body.acceleration.y = 0;
+				cameraTargetDistance += rocketStages[0].height/2;	// For camera easing
+				rocketStages.shift();
+			}
+			
 			if(rocketStages.length > 0){
 				//game.camera.follow(rocketStages[Math.round((rocketStages.length-1)/2)]);
 				//this.changeCameraTarget(rocketStages[Math.round((rocketStages.length-1)/2)]);
@@ -449,7 +524,9 @@ var Game = {
 				game.time.events.add(Phaser.Timer.SECOND * 1, function(){ 
 					rocketPayLoad.body.acceleration.y = 0; }, this);
 			}
-			currentRocketStage++;
+			
+			
+			console.log('Current Stage = ' + currentRocketStage);
 		}
 	},
 	unpause : function(event){
