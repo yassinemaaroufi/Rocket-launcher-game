@@ -14,8 +14,7 @@ TODO
 
 Main
 ----
-* Implement darkening background
-	* Apply a mask to the background: gets darker at the same time as higher altitude
+* Work on the graphics
 * Implement booster stage
 	* Adapt flame emitter width
 
