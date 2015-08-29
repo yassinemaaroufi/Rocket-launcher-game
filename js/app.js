@@ -86,7 +86,7 @@ var scoreMaxAltitude;
 
 var launchButton;	// Launch rocket
 var stageButton;	// Release next stage
-var buttonLabel;		// Text above launch/release button
+//var buttonLabel;		// Text above launch/release button
 
 // Game modes
 var Splash = {
@@ -128,7 +128,8 @@ var Game = {
 				+ 'launchpad.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
 		game.load.atlas('launchpad-bg', ATLAS_SRC + 'launchpad-bg.png', ATLAS_SRC 
 				+ 'launchpad-bg.json', Phaser.Loader.TEXTURE_ATLAS_JSON_HASH);
-		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
+		//game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
+		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 550, 550);
     	game.load.image('smoke', 'assets/sprites/particles/smoke.png');
     	game.load.image('flame', 'assets/sprites/particles/flame.png');
     	game.load.image('replay-button', 'assets/sprites/buttons/replay.png');
@@ -241,6 +242,22 @@ var Game = {
 				- boosterStage[0].width/2 - ROCKET_CONF[currentRocket]['boosterRelX'];
 			boosterStage[1].x = ROCKET_X_START_POSITION + rocketStages[0].width/2 
 				- boosterStage[1].width/2 + ROCKET_CONF[currentRocket]['boosterRelX'];
+			/*boosterStage = [];
+			var stg = game.make.sprite(0, 0, 'rocket');
+			stg.frame = ROCKET_CONF[currentRocket]['boosterFrame'];
+			game.physics.arcade.enable(stg);
+			stg.x = -stg.width;
+			stg.y = rocketStages[0].height - stg.height;
+			boosterStage.push(stg);
+			rocketStages[0].addChild(stg);
+
+			stg = game.make.sprite(0, 0, 'rocket');
+			stg.frame = ROCKET_CONF[currentRocket]['boosterFrame'];
+			game.physics.arcade.enable(stg);
+			stg.x = rocketStages[0].width;
+			stg.y = rocketStages[0].height - stg.height;
+			boosterStage.push(stg);
+			rocketStages[0].addChild(stg);*/
 		}
 
 		// Invisible camera target
@@ -287,9 +304,11 @@ var Game = {
 		// Buttons
 		launchButton = this.setupActionButton(0, GAME_HEIGHT/2, 'launch-button', 
 				this.launchRocket, this, 0, 1);
-		buttonLabel = game.add.text(0, 0, 'Ignition', { fontSize: '14px', fill: '#fff' });
-		buttonLabel.fixedToCamera = true;
-		buttonLabel.cameraOffset.setTo(0, GAME_HEIGHT/2 - 25);
+		launchButton.scale.x = 64/550;
+		launchButton.scale.y = 64/550;
+		//buttonLabel = game.add.text(0, 0, 'Ignition', { fontSize: '14px', fill: '#fff' });
+		//buttonLabel.fixedToCamera = true;
+		//buttonLabel.cameraOffset.setTo(0, GAME_HEIGHT/2 - 25);
 
 
 		},
@@ -360,7 +379,7 @@ var Game = {
 						console.log('Game end');
 						gameEnded = true;
 						launchButton.destroy(); 
-						buttonLabel.destroy(); 
+						//buttonLabel.destroy(); 
 						this.endGame();
 					}
 				}
@@ -405,21 +424,17 @@ var Game = {
 			emitterFlame.y = rocketStages[0].y + rocketStages[0].height;
 			emitterFlame.width = rocketStages[0].width;
 		}
+
+		// Boosters coordinates
+		if(ROCKET_CONF[currentRocket]['booster'] && !boosterStageReleased){
+			var r = rocketStages[0];
+			var s = ROCKET_CONF[currentRocket]['boosterRelX'];
+			boosterStage[0].x = r.x - boosterStage[0].width - s;
+			boosterStage[0].y = r.y + r.height - boosterStage[0].height;
+			boosterStage[1].x = r.x + r.width + s;
+			boosterStage[1].y = r.y + r.height - boosterStage[0].height;
+		}
 		
-		// Game end
-		/*if(rocketLaunched){
-			if(payloadDeployed && rocketPayLoad.y > game.camera.y + GAME_HEIGHT){
-				this.endGame();
-			}
-			if(!payloadDeployed && rocketStages[0].y > game.world.height - FLOOR_HEIGHT 
-			   - LAUNCHPAD_CONF[currentLaunchpad]['height'] - rocketStages[0].height){ 
-				this.endGame();
-			}
-			if(!payloadDeployed && !boosterStageReleased && boosterStage[0].y > game.world.height - FLOOR_HEIGHT 
-			   - LAUNCHPAD_CONF[currentLaunchpad]['height'] - boosterStage[0].height){
-				this.endGame();
-			}
-		}*/
 	},
 	endGame : function(){
 		game.time.events.add(Phaser.Timer.SECOND * 1, function(){
@@ -462,9 +477,9 @@ var Game = {
 				}
 			}
 			if(rocketStages.length == 1){ 
-				buttonLabel.text = 'Deploy payload';
+				//buttonLabel.text = 'Deploy payload';
 			}else{
-				buttonLabel.text = 'Release stage';
+				//buttonLabel.text = 'Release stage';
 			}
 			
 			emitterFlame.flow(1000, 50, 10);	// Particles of flame
@@ -501,14 +516,14 @@ var Game = {
 				rocketStages[0].body.acceleration.y = DEFAULT_ACCELERATION;
 				emitterFlame.on = true;
 				if(rocketStages.length == 1){ 
-					buttonLabel.text = 'Deploy payload';
+					//buttonLabel.text = 'Deploy payload';
 				}
 
 			}else{
 				// Last Stage release (payload)
 				payloadDeployed = true;
 				launchButton.destroy(); 
-				buttonLabel.destroy(); 
+				//buttonLabel.destroy(); 
 				rocketPayLoad = game.add.sprite(0, 0, 'rocket');
 				rocketPayLoad.frame = ROCKET_CONF[currentRocket]['payLoadFrame'];
 				rocketPayLoad.x = ROCKET_X_START_POSITION - rocketPayLoad.width/2;
