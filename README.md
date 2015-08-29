@@ -14,19 +14,14 @@ TODO
 
 Main
 ----
+* Implement darkening background
+	* Apply a mask to the background: gets darker at the same time as higher altitude
 * Implement booster stage
-	* Add to screen [DONE]
-	* Collision detection with ground [DONE]
-	* Add acceleration on launch [DONE]
-	* Add release on button push [DONE]
-	* Add fuel gauge [DONE]
 	* Adapt flame emitter width
-	* Fix difference in travel speed (due to mass maybe?)
 
 Animation & graphics
 --------------------
 * Buttons
-	* 
 	* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
 * Smoke & fire from real footage
 	* https://www.youtube.com/watch?v=OOwD1O8LzKI (baikonour/proton) 1080p
@@ -38,7 +33,6 @@ Animation & graphics
 	> vid to img: mplayer -vo null -ao null -frames 0 -identify file.avi > mplayer -vo jpeg -sstep 5 -endpos 145 file.avi
 * Rocket fairing removal animation when deploy payload		<----------------------------------------
 * Display stage exhausts when releasing stage
-* Apply a mask to the background: gets darker at the same time as higher altitude
 * Background sprites: Clouds, stars, birds, debris (boots, banana, ), astronaut, etoile filante
 * Background: atmosphere, stratosphere, space
 * Other buttons: menu, shop

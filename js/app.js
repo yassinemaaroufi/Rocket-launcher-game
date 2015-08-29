@@ -51,10 +51,11 @@ var LAUNCHPAD_CONF = {
 // Global variables
 var platforms;
 var cursors;
-var score = 0;
+var score;
 //var scoreText;
 var map;
 var layer;
+var bgTint;
 
 var pauseButton;
 var inGameMenu;
@@ -144,11 +145,19 @@ var Game = {
 		game.physics.arcade.gravity.y = GRAVITY;
 		gameEnded = false;
 
-		//ROCKET_X_START_POSITION = game.world.width/2;
-
 		// Background
 		game.stage.backgroundColor = '#b2b2ff';
 		//game.add.sprite(0, 0, 'sky');
+		// background tint
+	    var bmd = game.add.bitmapData(GAME_WIDTH, GAME_HEIGHT);
+		bmd.ctx.beginPath();
+		bmd.ctx.rect(0, 0, GAME_WIDTH, GAME_HEIGHT);
+		bmd.ctx.fillStyle = '#000000';
+		bmd.ctx.fill();
+		bgTint = game.add.sprite(0, game.world.height - GAME_HEIGHT, bmd);
+		bgTint.alpha = 0;
+		bgTint.fixedToCamera = true;
+		bgTint.cameraOffset.setTo(0, 0);
 		
 		// Tilemaps
 		//map = game.add.tilemap('tilemap1', tileWidth, tileHeight);
@@ -434,6 +443,13 @@ var Game = {
 			boosterStage[1].x = r.x + r.width + s;
 			boosterStage[1].y = r.y + r.height - boosterStage[0].height;
 		}
+
+		// Background tint
+		if(rocketLaunched){
+			bgTint.alpha = (game.world.height - GAME_HEIGHT - game.camera.y) 
+				/ (game.world.height - GAME_HEIGHT);
+		}
+		if(bgTint.alpha >= 1){ bgTint.alpha = 1; }
 		
 	},
 	endGame : function(){
