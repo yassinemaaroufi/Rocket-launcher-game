@@ -15,6 +15,7 @@ TODO
 Main
 ----
 * Work on the graphics
+* Put payloads in their own atlas
 * Implement booster stage
 	* Adapt flame emitter width
 

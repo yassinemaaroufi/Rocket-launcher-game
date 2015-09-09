@@ -38,6 +38,15 @@ var ROCKET_CONF = {
 		'boosterFrame': 3,
 		'boosterRelY': 0,
 		'boosterRelX': -5
+	},
+	'delta-iv-heavy':{
+		'stages': 2,
+		'firstFrame': 6,
+		'payLoadFrame': 5,
+		'booster': true,
+		'boosterFrame': 8,
+		'boosterRelY': 0,
+		'boosterRelX': 0
 	}
 };
 var LAUNCHPAD_CONF = {
@@ -60,7 +69,7 @@ var bgTint;
 var pauseButton;
 var inGameMenu;
 
-var currentRocket = 'test-booster';
+var currentRocket = 'delta-iv-heavy';
 var currentLaunchpad = 'test';
 
 var cameraTarget;
@@ -541,7 +550,9 @@ var Game = {
 				launchButton.destroy(); 
 				//buttonLabel.destroy(); 
 				rocketPayLoad = game.add.sprite(0, 0, 'rocket');
+				//rocketPayLoad = game.add.sprite(0, 0, 'payload');
 				rocketPayLoad.frame = ROCKET_CONF[currentRocket]['payLoadFrame'];
+				//rocketPayLoad.frame = ROCKET_CONF[currentPayload]['frame'];
 				rocketPayLoad.x = ROCKET_X_START_POSITION - rocketPayLoad.width/2;
 				rocketPayLoad.y = stageHeight;
 				game.physics.arcade.enable(rocketPayLoad);
