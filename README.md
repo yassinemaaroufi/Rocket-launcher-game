@@ -12,17 +12,11 @@ TODO
 
 >> See: http://www.rocketgame.org/online/wonder-rocket-2-game.html
 
-Main
-----
 * Work on the graphics
-* Put payloads in their own atlas
-* Implement booster stage
-	* Adapt flame emitter width
-
-Animation & graphics
---------------------
-* Buttons
-	* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
+	* Add smoke
+	* Add launchpad
+	* Add ground
+	* Add payload
 * Smoke & fire from real footage
 	* https://www.youtube.com/watch?v=OOwD1O8LzKI (baikonour/proton) 1080p
 	* https://www.youtube.com/watch?v=XfJoDxX0m7s (spacex falcon 9) 1080p
@@ -32,10 +26,21 @@ Animation & graphics
 	> vid to img: mplayer -vo png:z=6 video.avi
 	> vid to img: mplayer -vo null -ao null -frames 0 -identify file.avi > mplayer -vo jpeg -sstep 5 -endpos 145 file.avi
 * Rocket fairing removal animation when deploy payload		<----------------------------------------
-* Display stage exhausts when releasing stage
+* Launch/release button alerts the player when its time to release (fuel < 10%) by blinking + sound
 * Background sprites: Clouds, stars, birds, debris (boots, banana, ), astronaut, etoile filante
 * Background: atmosphere, stratosphere, space
-* Other buttons: menu, shop
+* Other in-game buttons: menu, shop
+* Fuel consumption coefficient for each rocket
+* Add game menus: 
+	* Main: Start, credits & exit
+	* Start: Choose rocket, Choose launchpad, Launch
+		* Choose rocket
+		* Choose launchpad
+	* Achievements & scores
+	* Credits
+
+* Put payloads in their own atlas
+* Display stage exhausts when releasing stage
 * Display altitude ladder in the background
 * Customization: 
 	* stickers on the rocket: flag, logo (nasa, companies, etc.), other (peace, etc.)
@@ -45,6 +50,7 @@ Animation & graphics
 
 Game mechanics
 --------------
+* Buy upgrades/fuel to go higher in the sky
 * In-game gif maker + gif sharing module
 * Random payload appears at each attempt
 	* Green alien, Nuke, Tux, boot
@@ -60,13 +66,6 @@ Game mechanics
 	* Constructor, Country, Years of service
 * Launchpad description card
 	* Name, country, map, pictures, video?
-* Add game menus: 
-	* Main: Start, credits & exit
-	* Start: Choose rocket, Choose launchpad, Launch
-		* Choose rocket
-		* Choose launchpad
-	* Achievements & scores
-	* Credits
 * Unlock rockets (order by date)
 	* Order by date
 	* Start with a 1 stage rocket then 2, 3 etc.

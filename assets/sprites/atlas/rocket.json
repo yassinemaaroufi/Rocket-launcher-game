@@ -6,8 +6,8 @@
 {"filename":"rocket-1-stage4",	"frame":{"x":96,"y":0,"w":16,"h":32},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":32},	"sourceSize":{"w":16,"h":32}},
 {"filename":"rocket-1-stage5",	"frame":{"x":112,"y":0,"w":32,"h":64},	"spriteSourceSize":{"x":0,"y":0,"w":32,"h":64},	"sourceSize":{"w":32,"h":64}},
 {"filename":"rocket-1-payload",	"frame":{"x":144,"y":0,"w":16,"h":16},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":16},	"sourceSize":{"w":16,"h":16}},
-{"filename":"delta-iv-heavy-stage1",	"frame":{"x":160,"y":0,"w":16,"h":144},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":144},	"sourceSize":{"w":16,"h":144}},
-{"filename":"delta-iv-heavy-stage2",	"frame":{"x":176,"y":0,"w":16,"h":65},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":65},		"sourceSize":{"w":16,"h":65}},
-{"filename":"delta-iv-heavy-booster",	"frame":{"x":192,"y":0,"w":16,"h":146},	"spriteSourceSize":{"x":0,"y":0,"w":32,"h":146},	"sourceSize":{"w":32,"h":146}}
+{"filename":"delta-iv-heavy-stage1",	"frame":{"x":160,"y":0,"w":16,"h":137},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":137},	"sourceSize":{"w":16,"h":137}},
+{"filename":"delta-iv-heavy-stage2",	"frame":{"x":176,"y":0,"w":16,"h":67},	"spriteSourceSize":{"x":0,"y":0,"w":16,"h":67},		"sourceSize":{"w":16,"h":67}},
+{"filename":"delta-iv-heavy-booster",	"frame":{"x":192,"y":0,"w":16,"h":137},	"spriteSourceSize":{"x":0,"y":0,"w":32,"h":137},	"sourceSize":{"w":32,"h":137}}
 
 ]}
