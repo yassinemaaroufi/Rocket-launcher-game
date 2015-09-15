@@ -141,6 +141,7 @@ var Game = {
 		//game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 32, 32);
 		game.load.spritesheet('launch-button', 'assets/sprites/buttons/launch.png', 550, 550);
     	game.load.image('smoke', 'assets/sprites/particles/smoke.png');
+    	game.load.image('launch-smoke', 'assets/sprites/smoke/smoke-particles-2.png');
     	game.load.image('flame', 'assets/sprites/particles/flame.png');
     	game.load.image('replay-button', 'assets/sprites/buttons/replay.png');
     	game.load.image('back-menu-button', 'assets/sprites/buttons/back-to-menu.png');
@@ -506,6 +507,24 @@ var Game = {
 			}else{
 				//buttonLabel.text = 'Release stage';
 			}
+
+			// Smoke Sprite
+			/*var launchSmoke = game.add.sprite(0, 0, 'launch-smoke');
+			var scaleValue2 = 1;
+			var widthValue = launchSmoke.width * scaleValue2;
+			var heightValue = launchSmoke.height * scaleValue2;
+			var scaleDuration = 2500;
+			launchSmoke.scale.setTo(0.1, 0.1);
+			launchSmoke.x = ROCKET_X_START_POSITION 
+				- (launchSmoke.scale.x * launchSmoke.width/2);
+			launchSmoke.y = game.world.height - FLOOR_HEIGHT 
+				- LAUNCHPAD_HEIGHT - (launchSmoke.scale.y * launchSmoke.height);
+			game.add.tween(launchSmoke.scale).to({x: scaleValue2, y: scaleValue2}, 
+					scaleDuration).start();
+			game.add.tween(launchSmoke).to({
+				x: ROCKET_X_START_POSITION - widthValue/2, 
+				y: game.world.height - FLOOR_HEIGHT - LAUNCHPAD_HEIGHT - heightValue
+			}, scaleDuration).start();*/
 			
 			emitterFlame.flow(1000, 50, 10);	// Particles of flame
 			emitterSmoke.flow(2000, 250, 100);	// Particles of smoke
